@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "Exo 2";
+  src: url(./Exo2.woff2) format(woff2),
+    url(./Exo2.woff) format(woff),
+    url(./Exo2.ttf) format(truetype);
+}
+
+@font-face {
+  font-family: "RussoOne";
+  src: url(./RussoOne.woff2) format(woff2),
+    url(./RussoOne.woff) format(woff),
+    url(./RussoOne.ttf) format(truetype);
+}

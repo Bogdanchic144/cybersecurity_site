@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Защита от мошенников{% endblock %}
+
+{% block content %}
+<section class="scammers-section">
+  <div class="decoration circle-1"></div>
+  <div class="decoration circle-2"></div>
+  
+  <div class="container">
+    <div class="scammers-hero">
+      <h1>Мошенники</h1>
+      <p class="scammers-subtitle">Узнайте о пяти самых распространенных схемах, которые используют мошенники, и как защитить себя от них</p>
+    </div>
+    
+    <div class="scammers-container">
+      <div class="scammers-grid">
+        <div class="scammers-card">
+          <h3 class="card-title">Распространенные схемы</h3>
+          <ul class="scammers-list">
+            <li class="scammers-item">Тебе пишет „друг“ с просьбой перевести деньги – всегда звони и уточняй!</li>
+            <li class="scammers-item">Вы выиграли iPhone! – это развод</li>
+            <li class="scammers-item">Ваш роутер атакован! Скачайте защиту! – не скачивай файлы с таких страниц</li>
+            <li class="scammers-item">Посылка задержана, перейдите по ссылке для уточнения данных – не переходи по незнакомым ссылкам.</li>
+            <li class="scammers-item">Подпишись на канал, введи номер карты — и получи денежный приз!</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="course-navigation">
+        <a href="{% url 'menu:social_security' %}" class="button prev-btn">← Назад</a>
+        <a href="{% url 'menu:viruses' %}" class="button next-btn">Далее →</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
