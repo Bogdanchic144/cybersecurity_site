@@ -135,6 +135,9 @@ body {
 main {
   flex: 1;
   padding-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Hero Section */
@@ -724,6 +727,11 @@ main {
 }
 
 @media (max-width: 480px) {
+
+  .obuch_button {
+    margin-left: 0;
+  }
+
   .hero {
     padding: 4rem 0 2rem;
   }
@@ -775,6 +783,11 @@ main {
 }
 
 @media (max-width: 768px) {
+
+  .obuch_button {
+    margin-left: 0;
+  }
+
   .course-navigation {
     gap: 15px;
     justify-content: center;
