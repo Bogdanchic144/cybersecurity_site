@@ -800,3 +800,48 @@ main {
   }
 }
 
+.antivirus-info {
+  display: flex;
+  margin: 0 25px 0 25px;
+}
+
+.antivirus-card {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.antivirus-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+}
+
+.scammers-hero {
+  text-align: center;
+  padding: 3rem 0rem 5rem 0rem;
+}
+
+.viruses-card-image {
+  width: 242px;
+  margin: 0 50px 0 50px;
+}
+
+@media (max-width: 768px) {
+  .antivirus-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .viruses-card-image {
+    width: 242px;
+    margin: 25px 0 25px 0;
+  }
+}
