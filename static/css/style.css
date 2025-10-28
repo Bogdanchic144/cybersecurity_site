@@ -863,6 +863,7 @@ button#menu-toggle.fnt.menu-toggle{
 .antivirus-info {
   display: flex;
   margin: 0 25px 0 25px;
+  gap: 6.2em;
 }
 
 .antivirus-card {
@@ -877,10 +878,45 @@ button#menu-toggle.fnt.menu-toggle{
   align-items: center;
   justify-content: space-between;
 }
+.antivirus-stat-card{
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .antivirus-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+}
+.scammers-card {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.scammers-grid{
+  display: flex;
+  margin: 0 25px 0 25px;
+  gap: 2em;
+}
+.scammers-image{
+  width: 242px;
+  margin: 0 128px 0 128px;
+  height: 376px;
 }
 
 .scammers-hero {
