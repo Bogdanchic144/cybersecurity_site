@@ -155,13 +155,58 @@ main {
   font-family: "RussoOne", sans-serif;
   font-weight: 400;
 }
+.hero p{
+  font-size: 1.2em;
+}
 
-.subtitle {
-  font-size: 1.2rem;
-  max-width: 600px;
-  margin: 0 auto 2rem;
-  color: var(--dark);
-  font-weight: 800;
+a.fnt.nav-link.active{
+  font-size: 1.2em;
+}
+button#menu-toggle.fnt.menu-toggle{
+  font-size: 1.2em;
+}
+
+.soc_subtitle{
+  font-size: 1.2em;
+  text-align: center;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+.main_subtitle{
+  font-size: 1.2em;
+  text-align: center;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.scammers-section h1{
+  font-size: 2.5em;
+}
+
+.password-section li{
+  font-size: 1.2em;
+}
+
+.hero checklist-item{
+  font-size: 1.2em;
+}
+
+.antivirus-section li{
+  font-size: 1.2em;
+}
+
+.scammers-section li{
+  font-size: 1.2em;
+}
+
+.parol_subtitle {
+  font-size: 1.2em;
+  text-align: center;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 
 .stats {
@@ -261,7 +306,10 @@ main {
 */
 .antivirus-hero{
   text-align: center;
-    padding: 3rem 0rem 5rem 0rem;
+  padding: 3rem 0rem 5rem 0rem;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 .antivirus-container{
   align-items: center;
@@ -292,7 +340,7 @@ main {
 }
 
 .password-section h3 {
-  font-size: 1.5rem;
+  font-size: 3 rem;
   margin-bottom: 1rem;
   color: var(--dark);
   border-bottom: 2px solid var(--primary);
@@ -639,7 +687,19 @@ main {
   transform: translateX(5px);
   transition: var(--transition);
 }
+.scammers-subtitle {
+  font-size: 1.2em;
+}
 
+.antivirus-subtitle{
+  font-size: 1.2em;
+}
+.fnt nav-link {
+  font-size: 1.2em;
+}
+.antivirus-section h1{
+  font-size: 2.5em;
+}
 /* Заголовок страницы */
 .hero h1 {
   font-family: "RussoOne", sans-serif;
@@ -826,11 +886,14 @@ main {
 .scammers-hero {
   text-align: center;
   padding: 3rem 0rem 5rem 0rem;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 
 .viruses-card-image {
   width: 242px;
-  margin: 0 50px 0 50px;
+  margin: 0 128px 0 128px;
 }
 
 @media (max-width: 768px) {
