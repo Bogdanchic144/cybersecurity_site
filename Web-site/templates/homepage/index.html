@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>Твой интернет - твоя безопасность</h1>
+    <p class="main_subtitle">Узнай, как защитить себя от мошенников и вирусов</p>
+
+    <div class="stats">
+      <div class="stat-card">
+        <img class="stats-card-image" src="{% static 'img/img1.png' %}" />
+        <p>Каждый 3-й школьник сталкивается с мошенничеством</p>
+      </div>
+      <div class="stat-card">
+        <img class="stats-card-image" src="{% static 'img/img3.png' %}" />
+        <p>Люди часто по случайности скачивают вредоносное ПО</p>
+      </div>
+      <div class="stat-card">
+        <img
+          class="stats-card-image small-image"
+          src="{% static 'img/img2.png' %}"
+        />
+        <p>Личная информация часто оказывается в открытом доступе</p>
+      </div>
+    </div>
+  </div>
+  <div class="course-navigation">
+    <a href="{% url 'menu:viruses' %}" class="obuch_button">Начать обучение</a>
+  </div>
+</section>
+{% endblock %} 

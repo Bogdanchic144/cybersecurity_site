@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}SafeSurf{% endblock %}</title>
+    <link rel="icon" href="{% static 'img/icon/logotype.ico' %}" />
+	<link rel="stylesheet" href="{% static 'fonts/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    {% include 'includes/header.html' %}
+    <main>{% block content %} {% endblock %}</main>
+    {% include 'includes/footer.html' %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.getElementById("menu-toggle");
+        const menuPanel = document.getElementById("menu-panel");
+
+        if (menuToggle && menuPanel) {
+          // Открытие/закрытие меню
+          menuToggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            menuPanel.classList.toggle("open");
+
+            // Закрытие при клике вне меню
+            if (menuPanel.classList.contains("open")) {
+              setTimeout(() => {
+                document.addEventListener("click", closeMenuOutside);
+              }, 10);
+            } else {
+              document.removeEventListener("click", closeMenuOutside);
+            }
+          });
+
+          // Предотвращаем закрытие при клике внутри меню
+          menuPanel.addEventListener("click", function (e) {
+            e.stopPropagation();
+          });
+
+          // Функция для закрытия меню при клике вне его области
+          function closeMenuOutside() {
+            menuPanel.classList.remove("open");
+            document.removeEventListener("click", closeMenuOutside);
+          }
+
+          // Закрытие меню при нажатии на Escape
+          document.addEventListener("keydown", function (event) {
+            if (
+              event.key === "Escape" &&
+              menuPanel.classList.contains("open")
+            ) {
+              menuPanel.classList.remove("open");
+              document.removeEventListener("click", closeMenuOutside);
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

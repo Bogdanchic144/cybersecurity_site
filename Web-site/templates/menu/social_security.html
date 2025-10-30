@@ -1,0 +1,452 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Безопасность в соцсетях
+{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>Защитите свои социальные сети</h1>
+    <p class="soc_subtitle">Проверьте ключевые настройки безопасности прямо сейчас</p>
+
+    <div class="privacy-grid">
+      <!-- Первая карточка (ВКонтакте) -->
+      <div class="privacy-card">
+        <div class="social-logo">
+          <img src="{% static 'img/vk_logo.png' %}" alt="ВКонтакте">
+        </div>
+        <div class="privacy-image-container">
+          <img src="{% static 'img/svaz_so_mnoi.png' %}" alt="Настройки приватности сообщений" 
+               class="privacy-image expandable-image" data-src="{% static 'img/svaz_so_mnoi.png' %}">
+          <div class="expand-hint">Нажмите для увеличения</div>
+        </div>
+        <div class="privacy-description">
+          <h3>Приватность сообщений</h3>
+          <p>Контролируйте, кто может писать вам в личные сообщения</p>
+        </div>
+      </div>
+      
+      <!-- Вторая карточка (Telegram) -->
+      <div class="privacy-card">
+        <div class="social-logo">
+          <img src="{% static 'img/telegram_logo.jpg' %}" alt="Telegram">
+        </div>
+        <div class="privacy-image-container">
+          <img src="{% static 'img/konfident.jpg' %}" alt="Настройки конфиденциальности профиля" 
+               class="privacy-image expandable-image" data-src="{% static 'img/konfident.jpg' %}">
+          <div class="expand-hint">Нажмите для увеличения</div>
+        </div>
+        <div class="privacy-description">
+          <h3>Конфиденциальность профиля</h3>
+          <p>Управляйте видимостью вашей личной информации</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="privacy-checklist">
+      <h2>Чек-лист безопасности</h2>
+      <div class="checklist">
+        <div class="checklist-item">
+          <input type="checkbox" id="check1" class="security-check">
+          <label for="check1">Включена двухфакторная аутентификация</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="check2" class="security-check">
+          <label for="check2">Профиль скрыт от посторонних</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="check3" class="security-check">
+          <label for="check3">Номер телефона скрыт</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="check4" class="security-check">
+          <label for="check4">Проверены приложения с доступом</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="check5" class="security-check">
+          <label for="check5">Включены уведомления о входе</label>
+        </div>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="security-progress"></div>
+        </div>
+        <div class="progress-text">Завершено: <span id="progress-value">0%</span></div>
+      </div>
+    </div>
+  </div>
+    <div class="course-navigation">
+      <a href="{% url 'menu:scummers' %}" class="button prev-btn"> Назад</a>
+      <a href="{% url 'menu:generate_password' %}" class="button next-btn">Далее</a>
+    </div>
+</section>
+
+<!-- Модальное окно для увеличенного просмотра -->
+<div id="image-modal" class="modal">
+  <span class="close-modal">&times;</span>
+  <img class="modal-content" id="expanded-image">
+  <div class="caption"></div>
+</div>
+
+<style>
+  .privacy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 40px auto;
+    max-width: 1200px;
+  }
+  
+  .privacy-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .social-logo {
+    padding: 15px 0;
+    text-align: center;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .social-logo img {
+    height: 40px;
+    width: auto;
+  }
+  
+  .privacy-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .privacy-image-container {
+    padding: 15px;
+    background: #f8f9fa;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .privacy-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 220px;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .privacy-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .expand-hint {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .privacy-image-container:hover .expand-hint {
+    opacity: 1;
+  }
+  
+  .privacy-description {
+    padding: 25px;
+  }
+  
+  .privacy-description h3 {
+    font-size: 1.5rem;
+    color: #1a1a2e;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  
+  .privacy-description p {
+    color: #555;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+  
+  .privacy-checklist {
+    max-width: 800px;
+    margin: 60px auto 40px;
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+  }
+  
+  .privacy-checklist h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #1a1a2e;
+    margin-bottom: 35px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #2e86de;
+    font-weight: 600;
+  }
+  
+  .checklist {
+    margin-bottom: 30px;
+  }
+  
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    padding: 18px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    margin: 8px 0;
+    cursor: pointer;
+  }
+  
+  .checklist-item:hover {
+    background-color: rgba(46, 134, 222, 0.05);
+    transform: translateX(5px);
+  }
+  
+  .checklist-item:last-child {
+    border-bottom: none;
+  }
+  
+  .checklist-item input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    margin-right: 18px;
+    accent-color: #2e86de;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  
+  .checklist-item label {
+    font-size: 1.15rem;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+    flex-grow: 1;
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .checklist-item.checked label {
+    color: #2e86de;
+    font-weight: 600;
+  }
+  
+  .checklist-item.checked {
+    background-color: rgba(46, 134, 222, 0.03);
+  }
+
+  .progress-container {
+    margin-top: 30px;
+  }
+
+  .progress-bar {
+    height: 12px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: #2e86de;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-text {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
+    font-weight: 500;
+  }
+
+  /* Стили для модального окна */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow: auto;
+  }
+  
+  .modal-content {
+    display: block;
+    margin: 0 auto;
+    max-width: 90%;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+    animation: zoom 0.3s;
+  }
+  
+  @keyframes zoom {
+    from {transform: scale(0.9); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+  }
+  
+  .close-modal:hover,
+  .close-modal:focus {
+    color: #bbb;
+    text-decoration: none;
+  }
+  
+  .caption {
+    color: #ccc;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .privacy-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .privacy-checklist {
+      padding: 30px 20px;
+      margin: 40px auto;
+    }
+    
+    .privacy-checklist h2 {
+      font-size: 1.7rem;
+    }
+    
+    .checklist-item label {
+      font-size: 1.05rem;
+    }
+    
+    .social-logo img {
+      height: 35px;
+    }
+    
+    .close-modal {
+      top: 15px;
+      right: 20px;
+      font-size: 30px;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.security-check');
+    const progressFill = document.getElementById('security-progress');
+    const progressText = document.getElementById('progress-value');
+    
+    // Обработка клика по всему пункту чек-листа
+    document.querySelectorAll('.checklist-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (e.target.type !== 'checkbox') {
+          const checkbox = this.querySelector('input[type="checkbox"]');
+          if (checkbox) {
+            checkbox.checked = !checkbox.checked;
+            updateProgress();
+          }
+        }
+      });
+    });
+    
+    // Обновление прогресса
+    function updateProgress() {
+      const checkedCount = document.querySelectorAll('.security-check:checked').length;
+      const total = checkboxes.length;
+      const percentage = Math.round((checkedCount / total) * 100);
+      
+      progressFill.style.width = `${percentage}%`;
+      progressText.textContent = `${percentage}%`;
+      
+      checkboxes.forEach(checkbox => {
+        const item = checkbox.closest('.checklist-item');
+        if(checkbox.checked) {
+          item.classList.add('checked');
+        } else {
+          item.classList.remove('checked');
+        }
+      });
+    }
+    
+    // Инициализация прогресса
+    updateProgress();
+    
+    // Просмотр изображений в полном размере
+    const modal = document.getElementById("image-modal");
+    const modalImg = document.getElementById("expanded-image");
+    const captionText = document.querySelector(".caption");
+    
+    // Получаем все изображения для просмотра
+    const expandableImages = document.querySelectorAll('.expandable-image');
+    
+    // Добавляем обработчики кликов
+    expandableImages.forEach(img => {
+      img.addEventListener('click', function() {
+        modal.style.display = "block";
+        modalImg.src = this.dataset.src;
+        captionText.innerHTML = this.alt;
+      });
+    });
+    
+    // Закрытие модального окна
+    const closeModal = document.querySelector(".close-modal");
+    
+    closeModal.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
+    
+    // Закрытие при клике вне изображения
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+    
+    // Закрытие по клавише ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === "Escape" && modal.style.display === "block") {
+        modal.style.display = "none";
+      }
+    });
+  });
+</script>
+{% endblock %}

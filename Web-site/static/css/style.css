@@ -1,0 +1,946 @@
+/* Variables */
+
+:root {
+  --primary: #2e86de;
+  --primary-dark: #1a6bb8;
+  --dark: #1a1a2e;
+  --light: #f5f5f5;
+  --white: #ffffff;
+  --gray: #e0e0e0;
+  --transition: all 0.3s ease;
+  --header-color: #d9d9d9;
+}
+
+/* Base Styles */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--light);
+  color: var(--dark);
+  line-height: 1.6;
+  font-family: "Inter", sans-serif;
+}
+
+.container {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  align-items: center;
+
+}
+
+/* Header Styles (без изменений) */
+.header {
+  background-color: var(--header-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon {
+  width: 50px;
+  height: 50px;
+  color: grey;
+}
+
+.logo {
+  color: var(--dark);
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-decoration: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+}
+
+.fnt {
+  font-family: "RussoOne", sans-serif;
+}
+
+.logo-text {
+  font-family: "Exo 2", serif;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: var(--dark);
+  text-decoration: none;
+  font-weight: 800;
+  transition: var(--transition);
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--dark);
+  transition: var(--transition);
+}
+/*Тут про мошенников */
+.scammers-section{
+  justify-content: center;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  ;
+}
+.nav-link:hover {
+  color: var(--dark);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: var(--dark);
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Main Content */
+main {
+  flex: 1;
+  padding-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 3rem 0rem 5rem 0rem;
+  background-image: url("{% static 'img/fone.jpg' %}");
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--dark);
+  font-weight: 800;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+}
+.hero p{
+  font-size: 1.2em;
+}
+
+a.fnt.nav-link.active{
+  font-size: 1.2em;
+}
+button#menu-toggle.fnt.menu-toggle{
+  font-size: 1.2em;
+}
+
+.soc_subtitle{
+  font-size: 1.2em;
+  text-align: center;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+.main_subtitle{
+  font-size: 1.2em;
+  text-align: center;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.scammers-section h1{
+  font-size: 2.5em;
+}
+
+.password-section li{
+  font-size: 1.2em;
+}
+
+.hero checklist-item{
+  font-size: 1.2em;
+}
+
+.antivirus-section li{
+  font-size: 1.2em;
+}
+
+.scammers-section li{
+  font-size: 1.2em;
+}
+
+.parol_subtitle {
+  font-size: 1.2em;
+  text-align: center;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card-image {
+  width: 242px;
+}
+
+.small-image {
+  width: 258px;
+  height: 209px;
+  margin-top: 1rem;
+}
+
+.obuch_button {
+  display: inline-block;
+  background-color: var(--dark);
+  color: var(--white);
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+  margin-top: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-left: 300px;
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--dark);
+  color: var(--white);
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+  margin-top: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+.button:hover {
+  background-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+  transform: translateY(-1px);
+}
+
+/* Footer Styles */
+.footer {
+  background: var(--header-color);
+  color: var(--dark);
+  padding: 0.5rem 0;
+  text-align: center;
+  margin-top: auto;
+  width: 100%;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0px 12px rgba(0, 0, 0, 0.1);
+}
+/*антивирусы
+*/
+.antivirus-hero{
+  text-align: center;
+  padding: 3rem 0rem 5rem 0rem;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+.antivirus-container{
+  align-items: center;
+}
+.footer .container {
+  width: 100%;
+}
+
+/* Password Section Styles */
+.password-section {
+  padding: 3rem 0;
+  background-color: var(--light);
+}
+
+.password-section h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--dark);
+  font-weight: 800;
+}
+
+.password-section h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--primary);
+}
+
+.password-section h3 {
+  font-size: 3 rem;
+  margin-bottom: 1rem;
+  color: var(--dark);
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
+
+.rules,
+.generator {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.rules ol,
+.generator ul {
+  padding-left: 1.5rem;
+}
+
+.rules li,
+.generator li {
+  margin-bottom: 0.8rem;
+  line-height: 1.6;
+}
+
+.generator p {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--dark);
+}
+
+.password-image {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.password-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.container-column {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-column h1 {
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+
+}
+
+.container-row {
+  display: flex;
+  align-items: center;
+}
+
+.row-el {
+  width: 34%;
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+}
+
+.pswrd-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  mix-blend-mode: multiply;
+  background-color: transparent;
+  object-fit: contain;
+}
+
+.password-generator-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.password-input {
+  padding: 0.8rem 1.2rem;
+  border: 2px solid var(--gray);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  background: var(--light);
+  color: var(--dark);
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 1px;
+  outline: none;
+}
+
+.password-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(46, 134, 222, 0.2);
+}
+
+.generate-btn {
+  background-color: var(--dark);
+  color: var(--white);
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: var(--transition);
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.generate-btn:hover {
+  background-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.generate-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Password strength indicator */
+.password-strength {
+  height: 5px;
+  border-radius: 3px;
+  margin-top: 0.5rem;
+  background: var(--gray);
+  overflow: hidden;
+}
+
+.strength-meter {
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+/* Copy button */
+.copy-btn {
+  background: transparent;
+  border: none;
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.copy-btn:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: var(--dark);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  position: relative;
+  transition: var(--transition);
+  border-radius: 4px;
+}
+
+.menu-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.menu-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--white);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 99;
+  max-height: 0;
+  overflow: hidden;
+  width: 250px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.menu-panel.open {
+  max-height: 500px;
+  opacity: 1;
+  transform: translateY(0);
+  padding: 1rem 0;
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-link {
+  padding: 0.8rem 1.5rem;
+  text-decoration: none;
+  color: var(--dark);
+  font-weight: 600;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+}
+
+.menu-link:hover {
+  background: var(--light);
+  color: var(--primary);
+}
+
+.menu-link::before {
+  content: "→";
+  margin-right: 0.8rem;
+  color: var(--primary);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.menu-link:hover::before {
+  opacity: 1;
+  transform: translateX(5px);
+}
+
+.password-input::placeholder {
+  color: #aaa;
+  font-weight: normal;
+  text-align: center;
+}
+
+.password-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.password-extra.visible {
+  opacity: 1;
+  max-height: 100px; /* Достаточное значение для размещения элементов */
+  margin-top: 0.5rem;
+}
+
+.password-strength {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--gray);
+  overflow: hidden;
+}
+
+.strength-meter {
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  color: var(--dark);
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  text-align: center;
+  padding: 0.3rem 0;
+}
+
+.copy-btn:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.fnt {
+  font-weight: 400;
+}
+
+.checklist {
+  max-width: 600px;
+  margin: 40px auto;
+  background: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--gray);
+}
+
+.checklist-item:last-child {
+  border-bottom: none;
+}
+
+.checklist-item input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  margin-right: 15px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.checklist-item label {
+  font-size: 18px;
+  color: var(--dark);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+/* Анимация при наведении на пункты */
+.checklist-item:hover {
+  background-color: rgba(74, 108, 247, 0.05);
+  border-radius: 8px;
+  padding: 15px 10px;
+  transform: translateX(5px);
+  transition: var(--transition);
+}
+.scammers-subtitle {
+  font-size: 1.2em;
+}
+
+.antivirus-subtitle{
+  font-size: 1.2em;
+}
+.fnt nav-link {
+  font-size: 1.2em;
+}
+.antivirus-section h1{
+  font-size: 2.5em;
+}
+/* Заголовок страницы */
+.hero h1 {
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: var(--dark);
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .main-nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero {
+    padding: 5rem 0 3rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+    
+  }
+
+  .stats {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-card {
+    max-width: 100%;
+  }
+
+  .footer {
+    min-height: auto;
+    padding: 1rem 0;
+  }
+
+  .password-section {
+    padding: 2rem 0;
+  }
+
+  .password-section h1 {
+    font-size: 2rem;
+  }
+
+  .password-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .rules,
+  .generator {
+    padding: 1rem;
+  }
+  .menu-links {
+    padding: 0.5rem 1rem;
+  }
+
+  .menu-link {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .menu-link:hover {
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .obuch_button {
+    margin-left: 0;
+  }
+
+  .hero {
+    padding: 4rem 0 2rem;
+  }
+
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .password-section h1 {
+    font-size: 1.8rem;
+  }
+
+  .password-section h2 {
+    font-size: 1.3rem;
+  }
+}
+
+
+.course-navigation {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--gray);
+}
+
+.prev-btn, .next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.prev-btn {
+  background: linear-gradient(90deg, #6c757d, #495057);
+}
+
+.next-btn {
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+}
+
+.prev-btn:hover, .next-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+
+  .obuch_button {
+    margin-left: 0;
+  }
+
+  .course-navigation {
+    gap: 15px;
+    justify-content: center;
+  }
+  
+  .prev-btn, .next-btn {
+    width: 100%;
+    max-width: 125px;
+    justify-content: center;
+  }
+}
+
+.antivirus-info {
+  display: flex;
+  margin: 0 25px 0 25px;
+  gap: 6.2em;
+}
+
+.antivirus-card {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.antivirus-stat-card{
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.antivirus-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+}
+.scammers-card {
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.scammers-grid{
+  display: flex;
+  margin: 0 25px 0 25px;
+  gap: 2em;
+}
+.scammers-image{
+  width: 242px;
+  margin: 0 128px 0 128px;
+  height: 376px;
+}
+
+.scammers-hero {
+  text-align: center;
+  padding: 3rem 0rem 5rem 0rem;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.viruses-card-image {
+  width: 242px;
+  margin: 0 128px 0 128px;
+}
+
+@media (max-width: 768px) {
+  .antivirus-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .viruses-card-image {
+    width: 242px;
+    margin: 25px 0 25px 0;
+  }
+}
