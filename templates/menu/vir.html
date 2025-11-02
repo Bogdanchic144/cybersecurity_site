@@ -1,0 +1,411 @@
+<!--
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вирусы - SafeSurf 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Секция с бэкапами */
+        .backup-section {
+            background: white;
+            padding: 50px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .backup-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .backup-illustration img {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .backup-text h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .backup-text p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Секция антивирусов */
+        .antivirus-section {
+            background: white;
+            padding: 50px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .antivirus-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .antivirus-text h3 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .antivirus-list {
+            list-style: none;
+        }
+
+        .antivirus-list li {
+            font-size: 18px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .antivirus-list li:last-child {
+            border-bottom: none;
+        }
+
+        .antivirus-illustration img {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Секция про вирусы */
+        .virus-section {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .virus-header {
+            margin-bottom: 40px;
+        }
+
+        .virus-header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .virus-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .virus-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .virus-tips ul {
+            list-style: none;
+        }
+
+        .virus-tips li {
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .virus-tips li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .virus-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .virus-alert {
+            text-align: center;
+        }
+
+        .virus-alert img {
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 20px;
+        }
+
+        .protect-banner {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #555;
+            letter-spacing: 2px;
+            padding: 20px;
+            border-top: 2px dashed #ccc;
+            border-bottom: 2px dashed #ccc;
+            margin: 30px 0;
+        }
+
+        .shield-icons {
+            color: #4a90e2;
+            font-size: 20px;
+        }
+
+        .action-icons {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .action-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .action-item img {
+            width: 100%;
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+
+        .action-item h4 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+
+        .action-item p {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+        }
+
+        footer p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Иконки в правой части первой секции */
+        .side-icons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .side-icons img {
+            width: 40px;
+            height: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .backup-content,
+            .antivirus-content,
+            .virus-content {
+                grid-template-columns: 1fr;
+            }
+
+            .action-icons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+-->
+<!--
+<body>
+    <div class="container">
+        <section class="virus-section">
+            <div class="virus-header">
+                <h1>Вирусы</h1>
+                <h2>Как избежать вирусов?</h2>
+            </div>
+
+            <div class="virus-content">
+                <div class="virus-tips">
+                    <ul>
+                        <li>Не качай файлы с подозрительных сайтов</li>
+                        <li>Проверяй расширения файлов (.exe — опасно!)</li>
+                        <li>Не отключай антивирус «для ускорения ПК»</li>
+                        <li>Не подключай чужие флешки (в них могут быть заражённые файлы)</li>
+                        <li>Регулярно обновляй операционную систему и программы</li>
+                        <li>Используй разные пароли для важных сервисов</li>
+                    </ul>
+                </div>
+
+                <div class="virus-visual">
+                    <div class="virus-alert">
+                        <img class="n" src="p" alt="Virus detected">
+                    </div>
+
+                    <div class="protect-banner">
+                        <img class="n" src="p" alt="Scan virus">
+                    </div>
+        </section>
+                    <div class="action-icons">
+                        <div class="action-item">
+                            <img class="n" src="p" alt="Backup data">
+                            <h4>BACK UP</h4>
+                            <p>DATA</p>
+                        </div>
+                        <div class="action-item">
+                            <img class="n" src="p" alt="Scan virus">
+                            <h4>SCAN</h4>
+                            <p>VIRUS</p>
+                        </div>
+                        <div class="action-item">
+                            <img class="n" src="p" alt="Update operation">
+                            <h4>UPDATE</h4>
+                            <p>OPERATION</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+     
+        <section class="backup-section">
+            <div class="backup-content">
+                <div class="backup-illustration">
+                    <img class="n" src="p" alt="Backup illustration">
+                </div>
+                <div class="backup-text">
+                    <h2>Регулярно делать бэкапы (резервные копии) данных</h2>
+                    <p>Это самое важное правило, которое спасет вас в любой критической ситуации (вирус-шифровальщик, поломка устройства, кража).</p>
+                    
+                    <p><strong>Правило «3-2-1»:</strong> Храните 3 копии данных, на 2 разных носителях, 1 из которых должен находиться в другом месте (например, облако + внешний жесткий диск).</p>
+                    
+                    <p><strong>Автоматизируйте процесс:</strong> Настройте автоматическое создание бэкапов, чтобы не полагаться на память.</p>
+                    
+                    <p><strong>Проверяйте копии:</strong> Периодически убеждайтесь, что ваши бэкапы рабочие и из них можно восстановить файлы.</p>
+                </div>
+            </div>
+        </section>
+
+      
+        <section class="antivirus-section">
+            <div class="antivirus-content">
+                <div class="antivirus-text">
+                    <h3>Какими антивирусами лучше всего пользоваться:</h3>
+                    <ul class="antivirus-list">
+                        <li>Avast Antivirus</li>
+                        <li>Kaspersky Free</li>
+                        <li>ESET NOD32</li>
+                        <li>Malwarebytes</li>
+                    </ul>
+                </div>
+                <div class="antivirus-illustration">
+                    <img class="n" src="p" alt="Security illustration">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© SafeSurf 2025</p>
+    </footer>
+</body>
+</html>
+-->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Защита от вирусов{% endblock %}
+
+{% block content %}
+<div class="container">
+        <section class="virus-section">
+            <div class="virus-header">
+                <h1>Вирусы</h1>
+                <h2>Как избежать вирусов?</h2>
+            </div>
+
+    <div class="antivirus-info">
+          <h3 class="card-title">Основные правила защиты</h3>
+          <ul class="antivirus-list">
+            <li class="antivirus-item">Не качай файлы с подозрительных сайтов</li>
+            <li class="antivirus-item">Проверяй расширения файлов (.exe — опасно!)</li>
+            <li class="antivirus-item">Не отключай антивирус «для ускорения ПК»</li>
+            <li class="antivirus-item">Не подключай чужие флешки (в них могут быть заражённые файлы)</li>
+            <li class="antivirus-item">Регулярно обновляй операционную систему и программы</li>
+            <li class="antivirus-item">Используй разные пароли для важных сервисов</li>
+          </ul>
+      <div class="antivirus-stat-card"> 
+        <img class="viruses-card-image" src="{% static 'img/virussss.svg' %}">
+    </div>
+        </section>
+        <!-- Секция о бэкапах -->
+        <section class="backup-section">
+            <div class="backup-content">
+                <div class="antivirus-stat-card"> 
+                  <img class="viruses-card-image" src="{% static 'img/virussss.svg' %}">
+                </div>
+                <div class="backup-text">
+                    <h2>Регулярно делать бэкапы (резервные копии) данных</h2>
+                    <p>Это самое важное правило, которое спасет вас в любой критической ситуации (вирус-шифровальщик, поломка устройства, кража).</p>
+                    
+                    <p><strong>Правило «3-2-1»:</strong> Храните 3 копии данных, на 2 разных носителях, 1 из которых должен находиться в другом месте (например, облако + внешний жесткий диск).</p>
+                    
+                    <p><strong>Автоматизируйте процесс:</strong> Настройте автоматическое создание бэкапов, чтобы не полагаться на память.</p>
+                    
+                    <p><strong>Проверяйте копии:</strong> Периодически убеждайтесь, что ваши бэкапы рабочие и из них можно восстановить файлы.</p>
+                </div>
+            </div>
+        </section>
+        <div class="antivirus-card">
+          <div class="antivirus-links">
+            <h3 class="card-title">Рекомендуемые антивирусы</h3>
+            <ul>
+                <li><a href="https://support.avast.com/ru-ru/#pc1" target="_blank" class="antivirus-link">Avast Antivirus</a></li>
+                <li><a href="https://www.kaspersky.ru/free-antivirus" target="_blank" class="antivirus-link">Kaspersky Free</a></li>
+                <li><a href="https://www.esetnod32.ru/download/home/commercial/" target="_blank" class="antivirus-link">ESET NOD32</a></li>
+                <li><a href="https://www.malwarebytes.com/ru/" target="_blank" class="antivirus-link">Malwarebytes</a></li>
+        <div class="antivirus-stat-card"> 
+          <img class="viruses-card-image" src="{% static 'img/virussss.svg' %}">
+        </div>
+          </div>
+        </div>
+        <div class="course-navigation">
+        <a href="{% url 'homepage:index' %}" class="button prev-btn"> На главную</a>
+        <a href="{% url 'menu:scummers' %}" class="button next-btn">Далее </a>
+      </div>
+    </div>     
+{% endblock %}
