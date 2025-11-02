@@ -15,3 +15,7 @@ class ScummersView(TemplateView):
 
 class VirusesView(TemplateView):
     template_name = 'menu/viruses.html'
+
+
+class VirView(TemplateView):
+    template_name = 'menu/vir.html'
