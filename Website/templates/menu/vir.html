@@ -351,61 +351,73 @@
 {% block title %}Защита от вирусов{% endblock %}
 
 {% block content %}
-<div class="container">
-        <section class="virus-section">
-            <div class="virus-header">
-                <h1>Вирусы</h1>
-                <h2>Как избежать вирусов?</h2>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вирусы - SafeSurf</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+        <div class="tips-section">
+            <div class="virus-info">
+                <h1 class="sidebar-title">Вирусы</h1>
+                <h2 class="tips-title">Как избежать вирусов?</h2>
+                <ul class="tips-list">
+                    <li class="tip-item">Не качай файлы с подозрительных сайтов</li>
+                    <li class="tip-item">Проверяй расширения файлов (.exe - опасно)</li>
+                    <li class="tip-item">Не отключай антивирус «для ускорения ПК»</li>
+                    <li class="tip-item">Не подключай чужие флешки (в них могут быть зловредные файлы)</li>
+                    <li class="tip-item">Регулярно обновляй операционную систему и программы</li>
+                    <li class="tip-item">Используй разные пароли для важных сервисов</li>
+                </ul>
+                <img class="viruses-card-image_1" src="{% static 'img/1_vir_card.svg' %}">
+            </a>
             </div>
-
-    <div class="antivirus-info">
-          <h3 class="card-title">Основные правила защиты</h3>
-          <ul class="antivirus-list">
-            <li class="antivirus-item">Не качай файлы с подозрительных сайтов</li>
-            <li class="antivirus-item">Проверяй расширения файлов (.exe — опасно!)</li>
-            <li class="antivirus-item">Не отключай антивирус «для ускорения ПК»</li>
-            <li class="antivirus-item">Не подключай чужие флешки (в них могут быть заражённые файлы)</li>
-            <li class="antivirus-item">Регулярно обновляй операционную систему и программы</li>
-            <li class="antivirus-item">Используй разные пароли для важных сервисов</li>
-          </ul>
-      <div class="antivirus-stat-card"> 
-        <img class="viruses-card-image" src="{% static 'img/virussss.svg' %}">
-    </div>
-        </section>
-        <!-- Секция о бэкапах -->
-        <section class="backup-section">
-            <div class="backup-content">
-                <div class="antivirus-stat-card"> 
-                  <img class="viruses-card-image" src="{% static 'img/virussss.svg' %}">
-                </div>
-                <div class="backup-text">
-                    <h2>Регулярно делать бэкапы (резервные копии) данных</h2>
-                    <p>Это самое важное правило, которое спасет вас в любой критической ситуации (вирус-шифровальщик, поломка устройства, кража).</p>
-                    
-                    <p><strong>Правило «3-2-1»:</strong> Храните 3 копии данных, на 2 разных носителях, 1 из которых должен находиться в другом месте (например, облако + внешний жесткий диск).</p>
-                    
-                    <p><strong>Автоматизируйте процесс:</strong> Настройте автоматическое создание бэкапов, чтобы не полагаться на память.</p>
-                    
-                    <p><strong>Проверяйте копии:</strong> Периодически убеждайтесь, что ваши бэкапы рабочие и из них можно восстановить файлы.</p>
-                </div>
+        </div>
+        <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+            <button class="btn">Открыть в новой вкладке</button>
+        </a>
+        <section class="backup-info">
+            <img class="viruses-card-image_2" src="{% static 'img/2_vir_card.svg' %}">
+            <div class="backup_section">
+                
+                <h3 class="info-title">Регулярно делать бэкапы (резервные копии) данных</h3>
+                <p class="info-text">
+                    Это самое важное правило, которое спасет вас в любой критической ситуации (вирус-шифровальщик, поломка устройства).
+                </p>
+                <p class="info-text">
+                    <strong>Правило «3-2-1»:</strong> Храните 3 копии данных, на 2 разных носителях, 1 из которых должен находиться в другом месте (например, облако + внешний жесткий диск).
+                </p>
+                <p class="info-text">
+                    <strong>Автоматизируйте процесс:</strong> Настройте автоматическое создание бэкапов, чтобы не полагаться на память.
+                </p>
+                <p class="info-text">
+                    <strong>Проверяйте копии:</strong> Периодически убеждайтесь, что ваши бэкапы рабочие и из них можно восстановить файлы.
+                </p>
+                <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+                    <button class="btn">Открыть в новой вкладке</button>
+                </a>
             </div>
         </section>
-        <div class="antivirus-card">
-          <div class="antivirus-links">
-            <h3 class="card-title">Рекомендуемые антивирусы</h3>
-            <ul>
-                <li><a href="https://support.avast.com/ru-ru/#pc1" target="_blank" class="antivirus-link">Avast Antivirus</a></li>
-                <li><a href="https://www.kaspersky.ru/free-antivirus" target="_blank" class="antivirus-link">Kaspersky Free</a></li>
-                <li><a href="https://www.esetnod32.ru/download/home/commercial/" target="_blank" class="antivirus-link">ESET NOD32</a></li>
-                <li><a href="https://www.malwarebytes.com/ru/" target="_blank" class="antivirus-link">Malwarebytes</a></li>
-        <div class="antivirus-stat-card"> 
-          <img class="viruses-card-image" src="{% static 'img/virussss.svg' %}">
-        </div>
-          </div>
-        </div>
-        <div class="course-navigation">
-        <a href="{% url 'homepage:index' %}" class="button prev-btn"> На главную</a>
-        <a href="{% url 'menu:scummers' %}" class="button next-btn">Далее </a>
-      </div>
-    </div>     
+            
+            <div class="antivirus-section">
+                <h3 class="antivirus-title">Какими антивирусами лучше всего пользоваться:</h3>
+                <ul class="antivirus-list">
+                    <li class="antivirus-item">Avast Antivirus</li>
+                    <li class="antivirus-item">Kaspersky Free</li>
+                    <li class="antivirus-item">ESET NOD32</li>
+                    <li class="antivirus-item">Malwarebytes</li>
+                </ul>
+            </div>
+            <div class="vir_image">
+                <img class="viruses-card-image_3" src="{% static 'img/3_vir_card.svg' %}">
+            </div>   
+            <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+            <button class="btn">Открыть в новой вкладке</button>
+            </a>
+        </aside>   
 {% endblock %}

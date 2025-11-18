@@ -92,6 +92,8 @@ body {
   transition: var(--transition);
   position: relative;
   padding: 0.5rem 0;
+  font-size: 1.2em;
+  font-weight: 400;
 }
 
 .nav-link::after {
@@ -163,7 +165,7 @@ a.fnt.nav-link.active{
   font-size: 1.2em;
 }
 button#menu-toggle.fnt.menu-toggle{
-  font-size: 1.2em;
+  font-size: 2em;
 }
 
 .soc_subtitle{
@@ -195,6 +197,7 @@ button#menu-toggle.fnt.menu-toggle{
 
 .antivirus-section li{
   font-size: 1.2em;
+  flex: 1;
 }
 
 .scammers-section li{
@@ -637,8 +640,12 @@ button#menu-toggle.fnt.menu-toggle{
   opacity: 1;
   text-decoration: underline;
 }
+.fnt menu-toggle{
+  font-weight: 800;
 
-.fnt {
+}
+
+a.fnt.nav-link.active{
   font-weight: 400;
 }
 
@@ -943,4 +950,34 @@ button#menu-toggle.fnt.menu-toggle{
     width: 242px;
     margin: 25px 0 25px 0;
   }
+}
+
+.tips-section ul{
+  font-size: 1.2em;
+}
+
+.backup_section p{
+  font-size: 1.2em;
+}
+
+.backup_section{
+  max-width: 500px;
+}
+
+.virus-info{
+  display: flex;
+  margin: 0 0 2.5em 0;
+  gap: 7em
+}
+.btn{
+  margin-left: 96em;
+}
+.backup-info{
+  display: flex;
+  gap: 30em ;
+}
+
+.viruses-card-image_1{
+  max-width: 48em;
+  max-height: 48em;
 }
