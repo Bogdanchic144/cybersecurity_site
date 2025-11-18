@@ -1,3 +1,4 @@
+
 from django.views.generic import TemplateView
 
 
@@ -19,5 +20,4 @@ class VirusesView(TemplateView):
 
 class VirView(TemplateView):
     template_name = 'menu/vir.html'
-
 

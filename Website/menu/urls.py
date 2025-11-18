@@ -1,3 +1,4 @@
+
 from django.urls import path
 
 from menu import views
@@ -30,6 +31,5 @@ urlpatterns = [
     ),
 
     path( 'vir/', views.VirView.as_view())
-
- 
 ]
+
