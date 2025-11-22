@@ -1,0 +1,8 @@
+gigachat
+openai
+crawlee
+requests
+aiogram
+lxml
+beautifulsoup4
+requests
