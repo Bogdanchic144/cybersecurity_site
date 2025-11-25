@@ -21,3 +21,6 @@ class VirusesView(TemplateView):
 class VirView(TemplateView):
     template_name = 'menu/vir.html'
 
+class VirInfo(TemplateView):
+    template_name = 'menu/virus-info.html'
+

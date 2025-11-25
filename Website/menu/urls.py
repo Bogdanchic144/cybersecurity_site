@@ -31,6 +31,11 @@ urlpatterns = [
     ),
 
     path( 'vir/', views.VirView.as_view(),
-    name = 'vir')
+    name = 'vir'),
+
+    path('virus-info/', views.VirInfo.as_view(),
+     name='virus-info'),
+
+
 ]
 

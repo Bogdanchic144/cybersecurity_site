@@ -30,8 +30,8 @@
                 <img class="viruses-card-image_1" src="{% static 'img/1_vir_card.svg' %}" alt="Изображение о защите от вирусов">
             </div>
         </div>
-        <a href="https://example.com" target="_blank" rel="noopener noreferrer">
-            <button class="btn">Открыть в новой вкладке</button>
+        <a href="{% url 'menu:virus-info' %}" target="_blank" rel="noopener noreferrer">
+            <button class="btn">Подробнее</button>
         </a>
         <section class="backup-info">
             <img class="viruses-card-image_2" src="{% static 'img/2_vir_card.svg' %}" alt="Изображение о резервном копировании">
@@ -50,7 +50,7 @@
                     <strong>Проверяйте копии:</strong> Периодически убеждайтесь, что ваши бэкапы рабочие и из них можно восстановить файлы.
                 </p>
                 <a href="https://example.com" target="_blank" rel="noopener noreferrer">
-                    <button class="btn">Открыть в новой вкладке</button>
+                    <button class="btn">Подробнее</button>
                 </a>
             </div>
         </section>
@@ -72,7 +72,7 @@
                 <img class="viruses-card-image_3" src="{% static 'img/3_vir_card.svg' %}" alt="Изображение об антивирусах">
             </div>
             <a href="https://example.com" target="_blank" rel="noopener noreferrer">
-            <button class="btn">Открыть в новой вкладке</button>
+            <button class="btn">Подробнее</button>
             </a>
         </aside>
         <div class="course-navigation">

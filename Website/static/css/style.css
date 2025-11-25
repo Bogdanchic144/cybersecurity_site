@@ -1018,14 +1018,14 @@ a.fnt.nav-link.active {
   background-color: #4D4FFF;
   color: white;
   border: none;
-  padding: 12px 23px;
+  padding: 14px 38px;
   border-radius: 7px;
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s;
   margin: 10px 0;
   margin-left: 12em;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .btn:hover {
@@ -1081,3 +1081,4 @@ a.fnt.nav-link.active {
   mix-blend-mode: multiply;
   background-blend-mode: multiply;
 }
+
