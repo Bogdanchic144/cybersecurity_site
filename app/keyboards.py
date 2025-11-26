@@ -6,6 +6,11 @@ levels = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Легко", callback_data="easy")]
 ])
 
+model_ai_choose = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Быстрая модель", callback_data="flesh")],
+    [InlineKeyboardButton(text="Умная модель")]
+])
+
 user_answer = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Да"), KeyboardButton(text="Нет")],
     [KeyboardButton(text="Подсказка")]
@@ -14,3 +19,4 @@ user_answer = ReplyKeyboardMarkup(keyboard=[
 password_choose = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Сгенерировать"), KeyboardButton(text="Проверить")]
 ], resize_keyboard=True)
+

@@ -1,17 +1,18 @@
 # from gigachat import GigaChat
 from openai import AsyncOpenAI
+from config import AI_KEY
 
 # import ssl
 
-async def set_prompt(prompt):
+async def set_prompt(prompt, model_ai):
     client = AsyncOpenAI(
-        api_key="AIzaSyBZC5yUUTvrIbKguiio5WvFk3FBTdlGwbg",
+        api_key=f"{AI_KEY}",
         base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
     )
 
     try:
         response = await client.chat.completions.create(
-            model="gemini-2.0-flash",
+            model=f"gemini-2.5-{model_ai}",
             messages=[{"role": "user", "content": prompt}]
         )
         return response.choices[0].message.content
