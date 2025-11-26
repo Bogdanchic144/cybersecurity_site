@@ -15,6 +15,7 @@ async def set_prompt(prompt, model_ai):
             model=f"gemini-2.5-{model_ai}",
             messages=[{"role": "user", "content": prompt}]
         )
+        print(response.choices[0].message.content)
         return response.choices[0].message.content
     except Exception as e:
         print(f"Ошибка: {e}")

@@ -1,3 +1,4 @@
+import asyncio
 import app.keyboards as kb
 
 from aiogram.filters import CommandStart, Command
@@ -18,6 +19,7 @@ class UserState(StatesGroup):
     user_password = State()
     password_len = State()
     prompt_ai = State()
+    model_ai = State()
 
 router = Router()
 
@@ -83,7 +85,7 @@ async def set_ask_safety(message: Message, state: FSMContext):
     with open("app/prompts/ask_safety_prompt.txt", "r", encoding='utf-8') as file:
         prompt = file.read()
     await state.update_data(prompt_ai=prompt)
-    await message.answer("Выберете сложность", reply_markup=kb.levels)
+    await message.answer("Выберете модель", reply_markup=kb.model_ai_choose)
 
 @router.message(Command("tasks"))
 async def set_task(message:Message, state: FSMContext):
@@ -91,28 +93,22 @@ async def set_task(message:Message, state: FSMContext):
     with open("app/prompts/task_secure_prompt.txt", "r", encoding='utf-8') as file:
         prompt = file.read()
     await state.update_data(prompt_ai=prompt)
-    await message.answer("Выберете сложность", reply_markup=kb.levels)
+    await message.answer("Выберете модель", reply_markup=kb.model_ai_choose)
+
+@router.callback_query(F.data.in_(["flash", "pro"]))
+async def set_flash(callback: CallbackQuery, state: FSMContext):
+    await state.update_data(model_ai=callback.data)
+    await callback.message.answer("Выберете сложность", reply_markup=kb.levels)
 
 @router.callback_query(F.data.in_(["hard", "medium", "easy"]))
 async def set_request(callback: CallbackQuery, state: FSMContext):
-    difficulty_map = {
+    challenge = {
         "hard": "сложное",
         "medium": "среднее",
         "easy": "легкое"
     }
 
-    data = await state.get_data()
-    difficulty_choose = difficulty_map[callback.data]
-    await callback.message.answer(f"Генерирую {difficulty_choose} задание...")
-    try:
-        text_generation = await set_prompt(f"{data["prompt_ai"]}\nСоставь {difficulty_choose} задание") # запрос ии
-        await state.update_data(current_text_generation=text_generation)
-        await state.set_state(UserState.waiting_for_answer)
-    except Exception as e:
-        await callback.message.answer(f"Произошла ошибка, перезапустите бота (/start) и попробуйте снова\n\nError:{e}")
-
-    def formating(begin, finish):
-        noformat_text = text_generation
+    def formating(begin, finish, noformat_text):
         if "#us#" in noformat_text:
             try:
                 noformat_text = noformat_text.replace("#us#", f"{callback.message.from_user.last_name}")
@@ -130,8 +126,20 @@ async def set_request(callback: CallbackQuery, state: FSMContext):
             print("Метки не найдены")
             return "Ошибка форматирования"
 
-    await callback.message.answer(text=formating("#ЗН#", "#ЗК#"))
-    await callback.message.answer(text=formating("#ВН#", "#ВК#"), reply_markup=kb.user_answer)
+    data = await state.get_data()
+    challenge_choose = challenge[callback.data]
+    model = data["model_ai"]
+    await callback.message.answer(f"Генерирую {challenge_choose} задание... (Режим: {model})    ")
+    try:
+        text_generation = await set_prompt(f"{data["prompt_ai"]}\nСоставь {challenge_choose} задание", model)
+        # запрос ии
+        await state.update_data(current_text_generation=text_generation)
+        await state.set_state(UserState.waiting_for_answer)
+        await callback.message.answer(text=formating("#ЗН#", "#ЗК#", text_generation))
+        await callback.message.answer(text=formating("#ВН#", "#ВК#", text_generation),
+                                      reply_markup=kb.user_answer)
+    except Exception as e:
+        await callback.message.answer(f"Произошла ошибка, перезапустите бота (/start) и попробуйте снова\n\nError:{e}")
 
 @router.message(UserState.waiting_for_answer, F.text.in_(["Да", "Нет"]))
 async def check_answer(message:Message, state: FSMContext):
@@ -178,3 +186,9 @@ async def helping_test(message:Message, state:FSMContext):
         await state.update_data(current_index=current_index)
     else:
         await message.answer("Подсказки закончились!")
+
+@router.message(F.text)
+async def any_message(message: Message):
+    await message.answer("Эээ...")
+    await asyncio.sleep(1)
+    await message.answer("эт че?")

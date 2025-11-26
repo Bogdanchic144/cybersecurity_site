@@ -7,8 +7,8 @@ levels = InlineKeyboardMarkup(inline_keyboard=[
 ])
 
 model_ai_choose = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Быстрая модель", callback_data="flesh")],
-    [InlineKeyboardButton(text="Умная модель")]
+    [InlineKeyboardButton(text="Быстрая модель", callback_data="flash")],
+    [InlineKeyboardButton(text="Про модель", callback_data="pro")]
 ])
 
 user_answer = ReplyKeyboardMarkup(keyboard=[
