@@ -1,8 +1,7 @@
 # from gigachat import GigaChat
+import openai
 from openai import AsyncOpenAI
 from config import AI_KEY
-
-# import ssl
 
 async def set_prompt(prompt, model_ai):
     client = AsyncOpenAI(
@@ -19,7 +18,7 @@ async def set_prompt(prompt, model_ai):
         return response.choices[0].message.content
     except Exception as e:
         print(f"Ошибка: {e}")
-        return None
+        return f"Ошибка: {e}"
 
 # async def set_prompt(level):
 #     giga = GigaChat(

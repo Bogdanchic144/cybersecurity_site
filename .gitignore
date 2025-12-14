@@ -2,7 +2,7 @@
 
 .venv/
 
-test.py
+files/test.py
 config.py
 
 __pycache__/

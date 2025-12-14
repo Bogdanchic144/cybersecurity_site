@@ -14,7 +14,7 @@ from check_passw import checking
 
 class UserState(StatesGroup):
     waiting_for_answer = State()
-    current_text_generation = State()
+    hints_response = State()
     current_index = State()
     user_password = State()
     password_len = State()
@@ -79,7 +79,15 @@ async def check_password2(message: Message, state: FSMContext):
             and result != "Слишком короткий пароль. Используйте минимум 8 символов."):
         await state.clear()
 
-@router.message(Command("safety_check"))
+@router.message(Command("virus_practice"))
+async def set_question(message: Message, state: FSMContext):
+    await state.clear()
+    with open("app/prompts/virus_prompt.txt", "r", encoding='utf-8') as file:
+        prompt = file.read()
+    await state.update_data(prompt_ai=prompt)
+    await message.answer("Выберете модель", reply_markup=kb.model_ai_choose)
+
+@router.message(Command("safety_practice"))
 async def set_ask_safety(message: Message, state: FSMContext):
     await state.clear()
     with open("app/prompts/ask_safety_prompt.txt", "r", encoding='utf-8') as file:
@@ -87,7 +95,7 @@ async def set_ask_safety(message: Message, state: FSMContext):
     await state.update_data(prompt_ai=prompt)
     await message.answer("Выберете модель", reply_markup=kb.model_ai_choose)
 
-@router.message(Command("tasks"))
+@router.message(Command("tasks_practice"))
 async def set_task(message:Message, state: FSMContext):
     await state.clear()
     with open("app/prompts/task_secure_prompt.txt", "r", encoding='utf-8') as file:
@@ -100,6 +108,92 @@ async def set_flash(callback: CallbackQuery, state: FSMContext):
     await state.update_data(model_ai=callback.data)
     await callback.message.answer("Выберете сложность", reply_markup=kb.levels)
 
+# @router.callback_query(F.data.in_(["hard", "medium", "easy"]))
+# async def set_request(callback: CallbackQuery, state: FSMContext):
+#     challenge = {
+#         "hard": "сложное",
+#         "medium": "среднее",
+#         "easy": "легкое"
+#     }
+#
+#     def formating(begin, finish, noformat_text):
+#         if "#us#" in noformat_text:
+#             try:
+#                 noformat_text = noformat_text.replace("#us#", f"{callback.message.from_user.last_name}")
+#             except Exception as e:
+#                 noformat_text = noformat_text.replace("#us#", "(Ваше имя)")
+#                 print(f"Ошибка:{e}")
+#
+#         start = noformat_text.find(begin) + len(begin)
+#         end = noformat_text.find(finish)
+#
+#         if start != -1 and end != -1:
+#             result = noformat_text[start:end].strip()
+#             return result
+#         else:
+#             print("Метки не найдены")
+#             return "Ошибка форматирования"
+#
+#     data = await state.get_data()
+#     challenge_choose = challenge[callback.data]
+#     model = data["model_ai"]
+#     await callback.message.answer(f"Генерирую {challenge_choose} задание... (Режим: {model})    ")
+#     try:
+#         text_generation = await set_prompt(f"{data["prompt_ai"]}\nСоставь {challenge_choose} задание", model)
+#         # запрос ии
+#         await state.update_data(hints_response=text_generation)
+#         await state.set_state(UserState.waiting_for_answer)
+#         await callback.message.answer(text=formating("#ЗН#", "#ЗК#", text_generation))
+#         await callback.message.answer(text=formating("#ВН#", "#ВК#", text_generation),
+#                                       reply_markup=kb.user_answer)
+#     except Exception as e:
+#         await callback.message.answer(f"Произошла ошибка, перезапустите бота (/start) и попробуйте снова\n\nError:{e}")
+#
+# @router.message(UserState.waiting_for_answer, F.text.in_(["Да", "Нет"]))
+# async def check_answer(message:Message, state: FSMContext):
+#     data = await state.get_data()
+#     text = data.get('hints_response')
+#     true_answer = text[text.find("#О#") + 3:]
+#     start_ta = true_answer.find("#1") + 2
+#     end_ta = true_answer.find("#2")
+#     if message.text in true_answer[start_ta:end_ta]:
+#         await message.answer(f"Правильно✅\n{true_answer[end_ta+2:]}", reply_markup=ReplyKeyboardRemove())
+#     else:
+#         await message.answer(f"Неправильно❌\n{true_answer[end_ta+2:]}", reply_markup=ReplyKeyboardRemove())
+#     await state.clear()
+#
+# @router.message(F.text == "Подсказка")
+# async def helping_test(message:Message, state:FSMContext):
+#     data = await state.get_data()
+#     text = data.get('hints_response')
+#     current_index = data.get('current_index', 0)
+#
+#     if not text:
+#         return
+#
+#     sps_helps = []
+#     while "#ПН#" in text:
+#         start = text.find("#ПН#") + 4
+#         end = text.find("#ПК#")
+#
+#         if start != -1 and end != -1:
+#             result = text[start:end].strip()
+#             sps_helps.append(result)
+#             text = text[end + 4:]
+#         else:
+#             break
+#
+#     if not sps_helps:
+#         await message.answer("В тексте нет подсказок")
+#         return
+#
+#     if current_index < len(sps_helps):
+#         await message.answer(f"Подсказка {current_index + 1}: {sps_helps[current_index]}")
+#         current_index += 1
+#         await state.update_data(current_index=current_index)
+#     else:
+#         await message.answer("Подсказки закончились!")
+
 @router.callback_query(F.data.in_(["hard", "medium", "easy"]))
 async def set_request(callback: CallbackQuery, state: FSMContext):
     challenge = {
@@ -108,71 +202,66 @@ async def set_request(callback: CallbackQuery, state: FSMContext):
         "easy": "легкое"
     }
 
-    def formating(begin, finish, noformat_text):
-        if "#us#" in noformat_text:
-            try:
-                noformat_text = noformat_text.replace("#us#", f"{callback.message.from_user.last_name}")
-            except Exception as e:
-                noformat_text = noformat_text.replace("#us#", "(Ваше имя)")
-                print(f"Ошибка:{e}")
-
-        start = noformat_text.find(begin) + len(begin)
-        end = noformat_text.find(finish)
-
-        if start != -1 and end != -1:
-            result = noformat_text[start:end].strip()
-            return result
-        else:
-            print("Метки не найдены")
-            return "Ошибка форматирования"
-
     data = await state.get_data()
     challenge_choose = challenge[callback.data]
     model = data["model_ai"]
-    await callback.message.answer(f"Генерирую {challenge_choose} задание... (Режим: {model})    ")
+    await callback.message.answer(f"Генерирую {challenge_choose} задание... (Режим: {model})")
     try:
         text_generation = await set_prompt(f"{data["prompt_ai"]}\nСоставь {challenge_choose} задание", model)
         # запрос ии
-        await state.update_data(current_text_generation=text_generation)
+        if "Ошибка: " in text_generation:
+            if "Error code: 429" in text_generation:
+                await callback.message.answer("Токенов больше нет...                     Ура!")
+            else:
+                await callback.message.answer(f"{text_generation}")
+
+        if "polzovatel" in text_generation:
+            text_generation = text_generation.replace("polzovatel",
+                                                      (callback.message.from_user.last_name or "(Ваше имя)"))
+
+        part_text = text_generation.split("___")
+        task = part_text[0]
+        question = part_text[1]
+
+        await state.update_data(hints_response=part_text)
         await state.set_state(UserState.waiting_for_answer)
-        await callback.message.answer(text=formating("#ЗН#", "#ЗК#", text_generation))
-        await callback.message.answer(text=formating("#ВН#", "#ВК#", text_generation),
-                                      reply_markup=kb.user_answer)
+        await callback.message.answer(task)
+        await callback.message.answer(question, reply_markup=kb.user_answer)
+
     except Exception as e:
         await callback.message.answer(f"Произошла ошибка, перезапустите бота (/start) и попробуйте снова\n\nError:{e}")
 
 @router.message(UserState.waiting_for_answer, F.text.in_(["Да", "Нет"]))
 async def check_answer(message:Message, state: FSMContext):
     data = await state.get_data()
-    text = data.get('current_text_generation')
-    true_answer = text[text.find("#О#") + 3:]
-    start_ta = true_answer.find("#1") + 2
-    end_ta = true_answer.find("#2")
-    if message.text in true_answer[start_ta:end_ta]:
-        await message.answer(f"Правильно✅\n{true_answer[end_ta+2:]}", reply_markup=ReplyKeyboardRemove())
-    else:
-        await message.answer(f"Неправильно❌\n{true_answer[end_ta+2:]}", reply_markup=ReplyKeyboardRemove())
-    await state.clear()
+    response = data.get('hints_response')
+    true_answer = response[2]
+    explanation = response[3]
 
+    if message.text in true_answer:
+        await message.answer(f"Правильно✅\n{explanation}", reply_markup=ReplyKeyboardRemove())
+    else:
+        await message.answer(f"Неправильно❌\n{explanation}", reply_markup=ReplyKeyboardRemove())
+    await state.clear()
 
 @router.message(F.text == "Подсказка")
 async def helping_test(message:Message, state:FSMContext):
     data = await state.get_data()
-    text = data.get('current_text_generation')
+    hints = data.get('hints_response')[4]
     current_index = data.get('current_index', 0)
 
-    if not text:
+    if not hints:
         return
 
     sps_helps = []
-    while "#ПН#" in text:
-        start = text.find("#ПН#") + 4
-        end = text.find("#ПК#")
+    while "#1" in hints:
+        start = hints.find("#1") + 2
+        end = hints.find("#2")
 
         if start != -1 and end != -1:
-            result = text[start:end].strip()
+            result = hints[start:end].strip()
             sps_helps.append(result)
-            text = text[end + 4:]
+            hints = hints[end + 2:]
         else:
             break
 
