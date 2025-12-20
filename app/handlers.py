@@ -1,15 +1,19 @@
 import asyncio
 import app.keyboards as kb
 
+
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
-from parce_meme import get_memes
-from set_ai import set_prompt
-from aiogram import Router, F
+from aiogram import Router, F, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.enums import ParseMode
+
 from generate_password import generate_passw
 from check_passw import checking
+from analysy_vt import get_file_info
+from parce_meme import get_memes
+from set_ai import set_prompt
 
 
 class UserState(StatesGroup):
@@ -20,13 +24,14 @@ class UserState(StatesGroup):
     password_len = State()
     prompt_ai = State()
     model_ai = State()
+    wait_file = State()
 
 router = Router()
 
 @router.message(CommandStart())
 async def cmd_start(message:Message, state:FSMContext):
     await state.clear()
-    await message.answer(("Привет! 👋"
+    await message.answer((f"Привет! {(message.from_user.first_name + f" {message.from_user.last_name or ''}" )}"
 "\nЯ — твой персональный тренажёр по цифровой безопасности."
 "\nЗдесь ты можешь потренироваться распознавать мошенников, прокачать навыки защиты своих данных, "
 "проверим надёжность твоих паролей и научим безопасно вести себя в интернете."
@@ -79,6 +84,52 @@ async def check_password2(message: Message, state: FSMContext):
             and result != "Слишком короткий пароль. Используйте минимум 8 символов."):
         await state.clear()
 
+@router.message(Command("virus_total"))
+async def virus_total(message: Message, state: FSMContext):
+    await state.clear()
+    msg = await message.answer("Отправьте мне файл, чтобы я его проверил!")
+    await state.set_state(UserState.wait_file)
+    await state.update_data(wait_file=[msg.message_id, message.chat.id])
+
+@router.message(UserState.wait_file)
+async def analys_file(message: Message, state: FSMContext, bot: Bot):
+    if doc := message.document:
+        name: str = doc.file_name
+        if doc.file_size < 20*1024*1024: # 20Mb
+            await bot.download(doc.file_id, destination=f"app/total_files/{name}")
+
+        else:
+            await message.answer(f"Файл слишком большой (Лимит 20Мб)")
+            await message.answer('Вы можете его проверить на сайте '
+                                 '[VirusTotal](https://www.virustotal.com/gui/home/upload)',
+                                parse_mode=ParseMode.MARKDOWN_V2)
+        await message.answer("Файл загружен! Анализирую файл...")
+
+        result = await get_file_info(name)
+        part_one = result.split("#S0S#")[0]
+        part_two = result.split("#S0S#")[1]
+        part_three = result.split("#S0S#")[2]
+        await message.answer(part_one, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.more_info)
+        await message.answer(part_two, parse_mode=ParseMode.MARKDOWN_V2)
+        await message.answer(part_three, parse_mode=ParseMode.MARKDOWN_V2)
+
+    else:
+        data = await state.get_data()
+        mess = data["wait_file"]
+        await bot.send_message(mess[1], ".", reply_to_message_id=mess[0])
+
+@router.callback_query(F.data == "vt_info")
+async def vt_info(callback: CallbackQuery):
+    info = """Вредоносный — Антивирус уверенно определил файл как вредоносный (вирус, троян и т.д.).\n
+Подозрительный — Антивирус нашел подозрительные характеристики, но не уверен на 100%. 
+Антивирус мог среагировать на подозрительные признаки, которые часто бывают у вирусов, или на код, 
+который специально скрыт или защищён.\n
+Не обнаружено — Антивирус не нашел ничего подозрительного в файле. 
+Не означает "безопасный" — просто ничего не нашел.\n
+Безопасный — Антивирус специально пометил файл как безопасный. 
+Обычно для известных легитимных файлов (системные файлы Windows, ПО с хорошей репутацией)."""
+    await callback.message.answer(info)
+
 @router.message(Command("virus_practice"))
 async def set_question(message: Message, state: FSMContext):
     await state.clear()
@@ -107,92 +158,6 @@ async def set_task(message:Message, state: FSMContext):
 async def set_flash(callback: CallbackQuery, state: FSMContext):
     await state.update_data(model_ai=callback.data)
     await callback.message.answer("Выберете сложность", reply_markup=kb.levels)
-
-# @router.callback_query(F.data.in_(["hard", "medium", "easy"]))
-# async def set_request(callback: CallbackQuery, state: FSMContext):
-#     challenge = {
-#         "hard": "сложное",
-#         "medium": "среднее",
-#         "easy": "легкое"
-#     }
-#
-#     def formating(begin, finish, noformat_text):
-#         if "#us#" in noformat_text:
-#             try:
-#                 noformat_text = noformat_text.replace("#us#", f"{callback.message.from_user.last_name}")
-#             except Exception as e:
-#                 noformat_text = noformat_text.replace("#us#", "(Ваше имя)")
-#                 print(f"Ошибка:{e}")
-#
-#         start = noformat_text.find(begin) + len(begin)
-#         end = noformat_text.find(finish)
-#
-#         if start != -1 and end != -1:
-#             result = noformat_text[start:end].strip()
-#             return result
-#         else:
-#             print("Метки не найдены")
-#             return "Ошибка форматирования"
-#
-#     data = await state.get_data()
-#     challenge_choose = challenge[callback.data]
-#     model = data["model_ai"]
-#     await callback.message.answer(f"Генерирую {challenge_choose} задание... (Режим: {model})    ")
-#     try:
-#         text_generation = await set_prompt(f"{data["prompt_ai"]}\nСоставь {challenge_choose} задание", model)
-#         # запрос ии
-#         await state.update_data(hints_response=text_generation)
-#         await state.set_state(UserState.waiting_for_answer)
-#         await callback.message.answer(text=formating("#ЗН#", "#ЗК#", text_generation))
-#         await callback.message.answer(text=formating("#ВН#", "#ВК#", text_generation),
-#                                       reply_markup=kb.user_answer)
-#     except Exception as e:
-#         await callback.message.answer(f"Произошла ошибка, перезапустите бота (/start) и попробуйте снова\n\nError:{e}")
-#
-# @router.message(UserState.waiting_for_answer, F.text.in_(["Да", "Нет"]))
-# async def check_answer(message:Message, state: FSMContext):
-#     data = await state.get_data()
-#     text = data.get('hints_response')
-#     true_answer = text[text.find("#О#") + 3:]
-#     start_ta = true_answer.find("#1") + 2
-#     end_ta = true_answer.find("#2")
-#     if message.text in true_answer[start_ta:end_ta]:
-#         await message.answer(f"Правильно✅\n{true_answer[end_ta+2:]}", reply_markup=ReplyKeyboardRemove())
-#     else:
-#         await message.answer(f"Неправильно❌\n{true_answer[end_ta+2:]}", reply_markup=ReplyKeyboardRemove())
-#     await state.clear()
-#
-# @router.message(F.text == "Подсказка")
-# async def helping_test(message:Message, state:FSMContext):
-#     data = await state.get_data()
-#     text = data.get('hints_response')
-#     current_index = data.get('current_index', 0)
-#
-#     if not text:
-#         return
-#
-#     sps_helps = []
-#     while "#ПН#" in text:
-#         start = text.find("#ПН#") + 4
-#         end = text.find("#ПК#")
-#
-#         if start != -1 and end != -1:
-#             result = text[start:end].strip()
-#             sps_helps.append(result)
-#             text = text[end + 4:]
-#         else:
-#             break
-#
-#     if not sps_helps:
-#         await message.answer("В тексте нет подсказок")
-#         return
-#
-#     if current_index < len(sps_helps):
-#         await message.answer(f"Подсказка {current_index + 1}: {sps_helps[current_index]}")
-#         current_index += 1
-#         await state.update_data(current_index=current_index)
-#     else:
-#         await message.answer("Подсказки закончились!")
 
 @router.callback_query(F.data.in_(["hard", "medium", "easy"]))
 async def set_request(callback: CallbackQuery, state: FSMContext):

@@ -20,3 +20,6 @@ password_choose = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Сгенерировать"), KeyboardButton(text="Проверить")]
 ], resize_keyboard=True)
 
+more_info = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Чего?", callback_data="vt_info")],
+])
