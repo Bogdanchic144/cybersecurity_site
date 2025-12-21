@@ -9,9 +9,9 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.enums import ParseMode
 
-from generate_password import generate_passw
-from check_passw import checking
-from analysy_vt import get_file_info
+from utils.password_generator import generate_passw
+from utils.password_checker import checking
+from utils.analysis_vt import get_file_info
 from parce_meme import get_memes
 from set_ai import set_prompt
 
@@ -97,21 +97,20 @@ async def analys_file(message: Message, state: FSMContext, bot: Bot):
         name: str = doc.file_name
         if doc.file_size < 20*1024*1024: # 20Mb
             await bot.download(doc.file_id, destination=f"app/total_files/{name}")
+            await message.answer("Файл загружен! Анализирую файл...")
 
+            result = await get_file_info(name)
+            part_one = result.split("#S0S#")[0]
+            part_two = result.split("#S0S#")[1]
+            part_three = result.split("#S0S#")[2]
+            await message.answer(part_one, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.more_info)
+            await message.answer(part_two, parse_mode=ParseMode.MARKDOWN_V2)
+            await message.answer(part_three, parse_mode=ParseMode.MARKDOWN_V2)
         else:
             await message.answer(f"Файл слишком большой (Лимит 20Мб)")
             await message.answer('Вы можете его проверить на сайте '
                                  '[VirusTotal](https://www.virustotal.com/gui/home/upload)',
                                 parse_mode=ParseMode.MARKDOWN_V2)
-        await message.answer("Файл загружен! Анализирую файл...")
-
-        result = await get_file_info(name)
-        part_one = result.split("#S0S#")[0]
-        part_two = result.split("#S0S#")[1]
-        part_three = result.split("#S0S#")[2]
-        await message.answer(part_one, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.more_info)
-        await message.answer(part_two, parse_mode=ParseMode.MARKDOWN_V2)
-        await message.answer(part_three, parse_mode=ParseMode.MARKDOWN_V2)
 
     else:
         data = await state.get_data()

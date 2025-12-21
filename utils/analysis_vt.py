@@ -88,7 +88,7 @@ async def get_file_info(file_name: str) -> str:
                         print(f"📊 Статус анализа: {status}")
                         await asyncio.sleep(15)
             else:
-                return r"⚠️ Анализ не завершился за отведенное время\, ~поэтому иди \#@\!$%~ попробуйте ещё раз"
+                return r"⚠️ Анализ не завершился за отведенное время\, попробуйте ещё раз"
 
             # STEP 3. НАСЛАЖДАЕМСЯ
             return format_analysis_result(analysis_data)
@@ -99,8 +99,6 @@ async def get_file_info(file_name: str) -> str:
         finally:
             file_path.unlink()
 def format_analysis_result(analysis_data) -> str:
-    """Форматирует результат анализа"""
-
     stats = analysis_data['data']['attributes']['stats']
     file_info = analysis_data['meta']['file_info']
     results = analysis_data['data']['attributes']['results']
