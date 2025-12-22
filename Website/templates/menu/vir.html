@@ -11,7 +11,7 @@
     <title>Вирусы - SafeSurf</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container_vir">
         <aside class="sidebar">
         <div class="tips-section">
             <div class="virus-info">
@@ -30,7 +30,7 @@
                 <img class="viruses-card-image_1" src="{% static 'img/1_vir_card.svg' %}" alt="Изображение о защите от вирусов">
             </div>
         </div>
-        <a href="{% url 'menu:virus-info' %}" target="_blank" rel="noopener noreferrer">
+        <a href="{% url 'menu:virus-info' %}"  rel="noopener noreferrer">
             <button class="btn">Подробнее</button>
         </a>
         <section class="backup-info">
@@ -49,7 +49,7 @@
                 <p class="info-text">
                     <strong>Проверяйте копии:</strong> Периодически убеждайтесь, что ваши бэкапы рабочие и из них можно восстановить файлы.
                 </p>
-                <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+                <a href="{% url 'menu:backup-info' %}" rel="noopener noreferrer">
                     <button class="btn">Подробнее</button>
                 </a>
             </div>
@@ -71,7 +71,7 @@
                 </div>
                 <img class="viruses-card-image_3" src="{% static 'img/3_vir_card.svg' %}" alt="Изображение об антивирусах">
             </div>
-            <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://example.com" rel="noopener noreferrer">
             <button class="btn">Подробнее</button>
             </a>
         </aside>
