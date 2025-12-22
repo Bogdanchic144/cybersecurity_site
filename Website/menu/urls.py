@@ -36,6 +36,9 @@ urlpatterns = [
     path('virus-info/', views.VirInfo.as_view(),
      name='virus-info'),
 
+    path('backup-info/', views.BackUpInfo.as_view(),
+    name='backup-info')
+
 
 ]
 

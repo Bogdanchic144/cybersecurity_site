@@ -34,6 +34,7 @@ body {
   margin: 0 auto;
   padding: 0 2rem;
   align-items: center;
+
 }
 
 /* Header Styles (без изменений) */
@@ -52,6 +53,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
 }
 
 .icon {
@@ -139,7 +141,7 @@ body {
 main {
   flex: 1;
   padding-bottom: 2rem;
-  display: flex;
+
   align-items: center;
   justify-content: center;
 }
@@ -154,6 +156,7 @@ main {
 .hero h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  margin-top: 1.2em ;
   color: var(--dark);
   font-weight: 800;
   font-family: "RussoOne", sans-serif;
@@ -187,6 +190,7 @@ button#menu-toggle.fnt.menu-toggle {
 
 .scammers-section h1 {
   font-size: 2.5em;
+  margin-top: 1.2em;
 }
 
 .password-section li {
@@ -324,6 +328,7 @@ button#menu-toggle.fnt.menu-toggle {
 }
 .footer .container {
   width: 100%;
+
 }
 
 /* Password Section Styles */
@@ -403,9 +408,17 @@ button#menu-toggle.fnt.menu-toggle {
   align-items: center;
 }
 
+.container_vir{
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  align-items: center;
+}
+
 .container-column h1 {
   font-family: "RussoOne", sans-serif;
   font-weight: 400;
+  margin-top: 1.2em;
 }
 
 .container-row {
@@ -979,6 +992,7 @@ a.fnt.nav-link.active {
 .viruses-card-image_1 {
   max-width: 48em;
   max-height: 48em;
+  margin-top: 1.2em;
 }
 
 
