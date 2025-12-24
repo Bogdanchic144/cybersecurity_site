@@ -33,7 +33,7 @@ async def get_file_info(file_name: str) -> str:
     """
     Асинхронная версия загрузки и получения анализа файла
     """
-    script_dir = Path(__file__).parent
+    script_dir = Path(__file__).parent.parent
     target_dir = script_dir / "app" / "total_files"
 
     all_path = list(target_dir.iterdir())

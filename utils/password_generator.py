@@ -1,6 +1,6 @@
 import string
 from random import randint
-with open("../data/words.txt", "r") as f:
+with open("utils/data/words.txt", "r") as f:
     sps_word = sorted([word for word in f.read().splitlines()], key=len)
 
 def generate_passw(length: int = 12):
