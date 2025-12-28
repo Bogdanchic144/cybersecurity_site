@@ -6,24 +6,36 @@
 <section class="hero">
   <div class="container">
     <h1>Твой интернет - твоя безопасность</h1>
-    <p class="main_subtitle">Узнай, как защитить себя от мошенников и вирусов</p>
+    <p class="main_subtitle">Узнай, как защитить себя от мошенников и вирусов в интеренте и как делать правильные пароли</p>
 
+    <a href="{% url 'menu:vir' %}" class="card-link">
     <div class="stats">
       <div class="stat-card">
-        <img class="stats-card-image" src="{% static 'img/img1.png' %}" />
-        <p1>Каждый 3-й школьник сталкивается с мошенничеством</p>
-      </div>
-      <div class="stat-card">
         <img class="stats-card-image" src="{% static 'img/img3.png' %}" />
-        <p2>Люди часто по случайности скачивают вредоносное ПО</p>
+        <p1>Вирусы и защита</p>
       </div>
+    </a>
+      <a href="{% url 'menu:scummers' %}" class="card-link">
+      <div class="stat-card">
+        <img class="stats-card-image" src="{% static 'img/img1.png' %}" />
+        <p2>Интернет-мошенничество</p>
+      </div>
+      </a>
+      <a href="{% url 'menu:social_security' %}" class="card-link">
       <div class="stat-card">
         <img
           class="stats-card-image small-image"
           src="{% static 'img/thir_main.svg' %}"
         />
-        <p3>Личная информация часто оказывается в открытом доступе</p>
+        <p3>Безопасность в социальных сетях</p>
       </div>
+      </a>
+      <a href="{% url 'menu:generate_password' %}" class="card-link">
+      <div class="stat-card">
+        <img class="stats-card-image4" src="{% static 'img/pc-parolls.jpg' %}" />
+        <p1>Пароли</p>
+      </div>
+    </a>
     </div>
   </div>
   <div class="course-navigation">

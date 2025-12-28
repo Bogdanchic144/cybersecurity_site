@@ -151,12 +151,18 @@ main {
   text-align: center;
   padding: 3rem 0rem 5rem 0rem;
   background-image: url("{% static 'img/fone.jpg' %}");
+  line-height: 1.7;
+    margin-bottom: 16px;
+    font-size: 1em;
+    font-family: "RussoOne", sans-serif;
+    margin-bottom: 1rem;
+  
 }
 
 .hero h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  margin-top: 1.2em ;
+  margin-top: 2.2em ;
   color: var(--dark);
   font-weight: 800;
   font-family: "RussoOne", sans-serif;
@@ -164,6 +170,7 @@ main {
 }
 .hero p {
   font-size: 1.4em;
+  
 }
 
 a.fnt.nav-link.active {
@@ -190,11 +197,17 @@ button#menu-toggle.fnt.menu-toggle {
 
 .scammers-section h1 {
   font-size: 2.5em;
-  margin-top: 1.2em;
+  margin-top: 2.2em;
 }
 
 .password-section li {
   font-size: 1.2em;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 1.1em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 
 .hero checklist-item {
@@ -208,10 +221,21 @@ button#menu-toggle.fnt.menu-toggle {
 .antivirus-section li {
   font-size: 1.2em;
   flex: 1;
-}
+  line-height: 1.7;
+  font-size: 1.1em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
+} 
 
 .scammers-section li {
   font-size: 1.2em;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 1.1em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 
 .parol_subtitle {
@@ -241,6 +265,7 @@ button#menu-toggle.fnt.menu-toggle {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  max-width: 15em;
 }
 
 .stat-card:hover {
@@ -251,10 +276,38 @@ button#menu-toggle.fnt.menu-toggle {
 .stats-card-image {
   width: 242px;
 }
+.stats-card-image4{
+  max-height: 15em;
+
+}
+
+.prev-btn1{
+display: inline-block;
+    background-color: var(--dark);
+    color: var(--white);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    margin-top: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: "RussoOne", sans-serif;
+}
+
+.prev-btn1:hover {
+    background-color: #0056b3;
+}
+
+.prev-btn1{
+  margin-left: 29.7em;
+}
 
 .small-image {
   width: 258px;
-  height: 209px;
+  height: 199px;
   margin-top: 1rem;
 }
 
@@ -265,7 +318,6 @@ button#menu-toggle.fnt.menu-toggle {
   padding: 0.8rem 2rem;
   border-radius: 50px;
   text-decoration: none;
-  font-weight: 700;
   font-size: 1.1rem;
   transition: var(--transition);
   border: none;
@@ -274,6 +326,9 @@ button#menu-toggle.fnt.menu-toggle {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-left: 300px;
 }
+
+
+
 
 .button {
   display: inline-block;
@@ -313,6 +368,12 @@ button#menu-toggle.fnt.menu-toggle {
   display: flex;
   align-items: center;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.1);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 1.em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem
 }
 /*антивирусы
 */
@@ -359,6 +420,12 @@ button#menu-toggle.fnt.menu-toggle {
   border-bottom: 2px solid var(--primary);
   padding-bottom: 0.5rem;
   text-align: center;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 1.6em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem 
 }
 
 .rules,
@@ -418,7 +485,7 @@ button#menu-toggle.fnt.menu-toggle {
 .container-column h1 {
   font-family: "RussoOne", sans-serif;
   font-weight: 400;
-  margin-top: 1.2em;
+  margin-top: 2.2em;
 }
 
 .container-row {
@@ -700,6 +767,12 @@ a.fnt.nav-link.active {
   font-weight: 500;
   cursor: pointer;
   flex-grow: 1;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 1.1em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 
 /* Анимация при наведении на пункты */
@@ -847,6 +920,10 @@ a.fnt.nav-link.active {
   padding: 12px 25px;
   font-size: 1.1rem;
   transition: all 0.3s ease;
+  line-height: 1.7; */
+  font-size: 1.1em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
 }
 
 .prev-btn {
@@ -927,6 +1004,12 @@ a.fnt.nav-link.active {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 1em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 .scammers-grid {
   display: flex;
@@ -967,10 +1050,21 @@ a.fnt.nav-link.active {
 
 .tips-section ul {
   font-size: 1.2em;
+  line-height: 1.7;
+  font-size: 1.2em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 
 .backup_section p {
   font-size: 1.2em;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 1.1em;
+  font-family: "RussoOne", sans-serif;
+  font-weight: 400;
+  margin-bottom: 1rem;
 }
 
 .backup_section {
@@ -992,7 +1086,7 @@ a.fnt.nav-link.active {
 .viruses-card-image_1 {
   max-width: 48em;
   max-height: 48em;
-  margin-top: 1.2em;
+  margin-top: 6.2em;
 }
 
 
@@ -1033,12 +1127,12 @@ a.fnt.nav-link.active {
   color: white;
   border: none;
   padding: 14px 38px;
-  border-radius: 7px;
+  border-radius: 50px;
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s;
   margin: 10px 0;
-  margin-left: 12em;
+  margin-left: 7em;
   font-size: 17px;
 }
 
