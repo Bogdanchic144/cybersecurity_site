@@ -444,6 +444,303 @@
             .vinfo-main {
                 padding: 32px 16px;
             }
+            @media (max-width: 768px) {
+            .vinfo-grid,
+            .vinfo-protection-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vinfo-main {
+                padding: 32px 16px;
+            }
+        }
+        
+        /* Планшеты и маленькие ноутбуки */
+        @media (max-width: 1024px) {
+            .vinfo-header-content {
+                padding: 48px 20px 64px;
+            }
+            
+            .vinfo-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .vinfo-header p {
+                font-size: 1.125rem;
+            }
+            
+            .vinfo-section h2 {
+                font-size: 1.4em;
+            }
+        }
+
+        /* Мобильные устройства */
+        @media (max-width: 768px) {
+            .vinfo-header-content {
+                padding: 40px 16px 56px;
+            }
+            
+            .vinfo-header h1 {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+            
+            .vinfo-header p {
+                font-size: 1rem;
+            }
+            
+            .vinfo-main {
+                padding: 32px 16px;
+            }
+            
+            .vinfo-section {
+                margin-bottom: 48px;
+            }
+            
+            .vinfo-section h2 {
+                font-size: 1.3em;
+            }
+            
+            .vinfo-grid,
+            .vinfo-protection-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .vinfo-card {
+                padding: 20px;
+            }
+            
+            .vinfo-card p {
+                font-size: 1rem;
+            }
+            
+            .vinfo-grid-card {
+                padding: 20px;
+            }
+            
+            .vinfo-grid-card h4 {
+                font-size: 1rem;
+            }
+            
+            .vinfo-grid-card p {
+                font-size: 0.95rem;
+            }
+            
+            .vinfo-detection-item {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .vinfo-detection-item h4 {
+                font-size: 1.1rem;
+            }
+            
+            .vinfo-detection-item p {
+                font-size: 0.95rem;
+            }
+            
+            .vinfo-protection-card {
+                padding: 20px;
+            }
+            
+            .vinfo-protection-card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .vinfo-protection-card p {
+                font-size: 0.95rem;
+            }
+            
+            .vinfo-warning-card,
+            .vinfo-info-card {
+                padding: 20px;
+            }
+            
+            .vinfo-warning-card h3,
+            .vinfo-info-card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .vinfo-styled-list li {
+                font-size: 0.95rem;
+            }
+        }
+        
+        /* Маленькие мобильные устройства */
+        @media (max-width: 480px) {
+            .vinfo-header-content {
+                padding: 32px 12px 48px;
+            }
+            
+            .vinfo-header-icon {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 12px;
+            }
+            
+            .vinfo-header-icon svg {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .vinfo-header h1 {
+                font-size: 1.75rem;
+                margin-bottom: 12px;
+            }
+            
+            .vinfo-header p {
+                font-size: 0.95rem;
+            }
+            
+            .vinfo-main {
+                padding: 24px 12px;
+            }
+            
+            .vinfo-section {
+                margin-bottom: 40px;
+            }
+            
+            .vinfo-section-header {
+                margin-bottom: 20px;
+            }
+            
+            .vinfo-section-icon {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .vinfo-section-icon svg {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .vinfo-section h2 {
+                font-size: 1.2em;
+            }
+            
+            .vinfo-card,
+            .vinfo-grid-card,
+            .vinfo-protection-card,
+            .vinfo-warning-card,
+            .vinfo-info-card {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .vinfo-card p {
+                font-size: 0.95rem;
+                margin-bottom: 12px;
+            }
+            
+            .vinfo-card h3,
+            h3 {
+                font-size: 1.2em;
+                margin-top: 24px;
+                margin-bottom: 12px;
+            }
+            
+            .vinfo-grid-card h4 {
+                font-size: 0.95rem;
+            }
+            
+            .vinfo-grid-card p {
+                font-size: 0.9rem;
+            }
+            
+            .vinfo-detection-item {
+                gap: 8px;
+            }
+            
+            .vinfo-detection-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .vinfo-detection-item h4 {
+                font-size: 1rem;
+                margin-bottom: 8px;
+            }
+            
+            .vinfo-detection-item p {
+                font-size: 0.9rem;
+            }
+            
+            .vinfo-protection-card-header {
+                gap: 8px;
+            }
+            
+            .vinfo-protection-card-header svg {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .vinfo-protection-card h3 {
+                font-size: 1rem;
+            }
+            
+            .vinfo-protection-card p,
+            .vinfo-protection-card .vinfo-detail {
+                font-size: 0.9rem;
+            }
+            
+            .vinfo-warning-card h3,
+            .vinfo-info-card h3 {
+                font-size: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .vinfo-warning-card h3 svg {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .vinfo-warning-card ul li,
+            .vinfo-styled-list li {
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+            
+            .vinfo-info-card p {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Очень маленькие экраны */
+        @media (max-width: 360px) {
+            .vinfo-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .vinfo-header p {
+                font-size: 0.9rem;
+            }
+            
+            .vinfo-main {
+                padding: 20px 10px;
+            }
+            
+            .vinfo-section h2 {
+                font-size: 1.1em;
+            }
+            
+            .vinfo-card,
+            .vinfo-grid-card,
+            .vinfo-protection-card,
+            .vinfo-warning-card,
+            .vinfo-info-card {
+                padding: 14px;
+            }
+            
+            .vinfo-card p,
+            .vinfo-grid-card p,
+            .vinfo-detection-item p,
+            .vinfo-protection-card p,
+            .vinfo-info-card p,
+            .vinfo-styled-list li {
+                font-size: 0.875rem;
+            }
+        }
         }
     </style>
 </head>
@@ -747,6 +1044,8 @@
                 <p>Если вы подозреваете, что ваш компьютер заражен, немедленно запустите полную проверку антивирусом, отключитесь от интернета и при необходимости обратитесь к специалистам.</p>
             </div>
         </section>
+        <a href="{% url 'menu:vir' %}" class="prev-btn1"> Назад</a>
+      </div>
     </main>
 </body>
 </html>
