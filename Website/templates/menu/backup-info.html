@@ -1,21 +1,9 @@
 {% extends 'base.html' %}
-
-{% block title %}Защита от вирусов{% endblock %}
+{% load static %}
+{% block title %}Компьютерные вирусы - Полное руководство{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Добавил префикс backup- ко всем классам для избежания конфликтов */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         .backup-body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
@@ -548,37 +536,6 @@
             }
         }
     </style>
-</head>
-<body class="backup-body">
-    {% load static %}
-<header class="header">
-  <div class="container">
-    <div class="header-content">
-      <a href="{% url 'homepage:index' %}" class="logo">
-        <img src="{% static 'img/icon/logotype.ico' %}" class="icon" />
-        <p href="{% url 'homepage:index' %}" class="logo-text">SafeSurf</p>
-      </a>
-      {% with request.resolver_match.view_name as view_name %}
-      <nav class="main-nav">
-        <div class="menu-container">
-          <button class="fnt menu-toggle" id="menu-toggle">☰</button>
-          <div class="menu-panel" id="menu-panel">
-            <nav class="menu-links">
-              <a href="http://127.0.0.1:8000/" class="fnt menu-link">Главная</a>
-              <a href="{% url 'menu:vir' %}" class="fnt menu-link">Защита от вирусов</a>
-              <a href="{% url 'menu:scummers' %}" class="fnt menu-link">Защита от мошенников</a>
-              <a href="{% url 'menu:social_security' %}" class="fnt menu-link">Безопасность в соцсетях</a>
-              <a href="{% url 'menu:generate_password' %}" class="fnt menu-link"
-                >Генератор паролей</a>
-            </nav>
-          </div>
-        </div>
-      </nav>
-      {% endwith %}
-            
-        </div>
-    </header>
-
     <!-- Main Content -->
     <main class="backup-main">
         <!-- What is backup -->
@@ -1045,6 +1002,4 @@
         </section>
         <a href="{% url 'menu:vir' %}" class="prev-btn1"> Назад</a>
     </main>
-</body>
-</html>
 {% endblock %} 

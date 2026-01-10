@@ -74,6 +74,41 @@
                 <img class="viruses-card-image_3" src="{% static 'img/3_vir_card.svg' %}" alt="Изображение об антивирусах">
             </div>
         </aside>
+        <a href="https://t.me/iCyberSecurityBot?start=virus_practice" 
+   target="_blank" 
+   class="tg-button">
+   <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style="vertical-align: middle; margin-right: 8px;">
+       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.06-.2-.07-.06-.17-.04-.24-.03-.1.02-1.71 1.09-4.83 3.2-.46.33-.88.49-1.25.48-.41-.01-1.21-.23-1.8-.42-.73-.23-1.31-.36-1.26-.76.02-.18.27-.36.74-.55 2.89-1.26 4.83-2.1 5.83-2.51 2.78-1.16 3.36-1.36 3.74-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0z"/>
+   </svg>
+   Пройти практику по вирусам
+</a>
+
+<style>
+.tg-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #0088cc, #006699);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-family: "RussoOne", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 136, 204, 0.2);
+}
+
+.tg-button:hover {
+    background: linear-gradient(135deg, #006699, #0088cc);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 136, 204, 0.3);
+    color: white;
+    text-decoration: none;
+}
+</style>
         <div class="course-navigation">
         <a href="{% url 'homepage:index' %}" class="button prev-btn"> На главную</a>
         <a href="{% url 'menu:scummers' %}" class="button next-btn">Далее </a>

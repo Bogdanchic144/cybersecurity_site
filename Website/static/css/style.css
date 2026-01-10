@@ -488,6 +488,23 @@ display: inline-block;
   margin-top: 2.2em;
 }
 
+.tg-button2{
+  margin-left: 27em;
+  margin-top: 4em;
+}
+
+.tg-button{
+  margin-left: 35.3em;
+}
+
+.tg-button3{
+  margin-top: 2em;
+}
+
+.tg-button4{
+  margin-top: 4em;
+}
+
 .container-row {
   display: flex;
   align-items: center;
