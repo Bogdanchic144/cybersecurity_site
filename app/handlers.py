@@ -175,7 +175,7 @@ async def set_request(callback: CallbackQuery, state: FSMContext):
         # запрос ии
         if "Ошибка: " in text_generation:
             if "Error code: 429" in text_generation:
-                await callback.message.answer("Токенов больше нет...                     Ура!")
+                await callback.message.answer("Токенов больше нет")
             else:
                 await callback.message.answer(f"{text_generation}")
 
