@@ -2,7 +2,7 @@ import aiohttp
 import asyncio
 
 from pathlib import Path
-from config import VT_KEY
+from config import Config
 
 
 def escape_markdown_v2(text: str) -> str:
@@ -30,9 +30,6 @@ def escape_markdown_v2(text: str) -> str:
     return text.translate(translation_table)
 
 async def get_file_info(file_name: str) -> str:
-    """
-    Асинхронная версия загрузки и получения анализа файла
-    """
     script_dir = Path(__file__).parent.parent
     target_dir = script_dir / "app" / "total_files"
 
@@ -49,7 +46,7 @@ async def get_file_info(file_name: str) -> str:
             url = "https://www.virustotal.com/api/v3/files"
             headers = {
                 "accept": "application/json",
-                "x-apikey": VT_KEY
+                "x-apikey": Config.VT_KEY
             }
 
             with open(file_path, "rb") as f:

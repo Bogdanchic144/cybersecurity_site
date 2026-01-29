@@ -14,6 +14,8 @@ from utils.password_checker import checking
 from utils.analysis_vt import get_file_info
 from parce_meme import get_memes
 from set_ai import set_prompt
+from forDB.db_service import DB
+
 
 
 class UserState(StatesGroup):
@@ -24,6 +26,7 @@ class UserState(StatesGroup):
     password_len = State()
     prompt_ai = State()
     model_ai = State()
+    challenge = State()
     wait_file = State()
 
 router = Router()
@@ -37,7 +40,7 @@ async def cmd_start(message:Message, state:FSMContext):
 "проверим надёжность твоих паролей и научим безопасно вести себя в интернете."
 "\n\nЯ буду давать тебе задания: от лёгких до продвинутых, из реальных ситуаций и бытовых сценариев."
 "\nГотов проверить себя и стать чуть менее уязвимым в сети? 🚀"), reply_markup=ReplyKeyboardRemove())
-
+    await DB.insert_user(message.from_user.id)
 
 @router.message(Command("get_memes"))
 async def get_meme(message:Message):
@@ -159,7 +162,7 @@ async def set_flash(callback: CallbackQuery, state: FSMContext):
     await callback.message.answer("Выберете сложность", reply_markup=kb.levels)
 
 @router.callback_query(F.data.in_(["hard", "medium", "easy"]))
-async def set_request(callback: CallbackQuery, state: FSMContext):
+async def choose_challenge(callback: CallbackQuery, state: FSMContext):
     challenge = {
         "hard": "сложное",
         "medium": "среднее",
@@ -168,32 +171,60 @@ async def set_request(callback: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
     challenge_choose = challenge[callback.data]
+    model_ai = data["model_ai"]
+
+    await state.update_data(challenge=challenge_choose)
+    await callback.message.answer(
+        f"Ваш запрос:\n    {challenge_choose} задание\n    модель ai {model_ai}",
+        reply_markup=kb.continue_or_no
+    )
+
+@router.message(F.text == "Продолжить")
+async def set_request(message: Message, state: FSMContext):
+    data = await state.get_data()
+
+    if ("challenge" not in data) or ("model_ai" not in data):
+        await message.answer(
+            "Произошла ошибка. Начните заново /start",
+            reply_markup=ReplyKeyboardRemove()
+        )
+        return
+
+    challenge_choose = data["challenge"]
     model = data["model_ai"]
-    await callback.message.answer(f"Генерирую {challenge_choose} задание... (Режим: {model})")
+
+    # await message.answer(f"Генерирую {challenge_choose} задание... (Режим: {model})")
+    to_delete = await message.answer("Секунду...")
     try:
         text_generation = await set_prompt(f"{data["prompt_ai"]}\nСоставь {challenge_choose} задание", model)
         # запрос ии
+
         if "Ошибка: " in text_generation:
             if "Error code: 429" in text_generation:
-                await callback.message.answer("Токенов больше нет")
+                await message.answer("Токенов больше нет")
+                return
             else:
-                await callback.message.answer(f"{text_generation}")
+                await message.answer(f"{text_generation}")
+                return
 
         if "polzovatel" in text_generation:
             text_generation = text_generation.replace("polzovatel",
-                                                      (callback.message.from_user.last_name or "(Ваше имя)"))
+                                                      (message.from_user.last_name
+                                                       or message.from_user.first_name
+                                                       or "Бро"))
 
         part_text = text_generation.split("___")
         task = part_text[0]
         question = part_text[1]
 
+        await to_delete.delete()
         await state.update_data(hints_response=part_text)
         await state.set_state(UserState.waiting_for_answer)
-        await callback.message.answer(task)
-        await callback.message.answer(question, reply_markup=kb.user_answer)
+        await message.answer(task)
+        await message.answer(question, reply_markup=kb.user_answer)
 
     except Exception as e:
-        await callback.message.answer(f"Произошла ошибка, перезапустите бота (/start) и попробуйте снова\n\nError:{e}")
+        await message.answer(f"Произошла ошибка, перезапустите бота (/start) и попробуйте снова\n\nError:{e}")
 
 @router.message(UserState.waiting_for_answer, F.text.in_(["Да", "Нет"]))
 async def check_answer(message:Message, state: FSMContext):
@@ -203,10 +234,12 @@ async def check_answer(message:Message, state: FSMContext):
     explanation = response[3]
 
     if message.text in true_answer:
-        await message.answer(f"Правильно✅\n{explanation}", reply_markup=ReplyKeyboardRemove())
+        await message.answer(f"Правильно✅\n{explanation}", reply_markup=kb.continue_or_no)
+        await DB.update_data(message.from_user.id, add_correct_answer=1)
     else:
-        await message.answer(f"Неправильно❌\n{explanation}", reply_markup=ReplyKeyboardRemove())
-    await state.clear()
+        await message.answer(f"Неправильно❌\n{explanation}", reply_markup=kb.continue_or_no)
+        await DB.update_data(message.from_user.id, add_incorrect_answer=1)
+
 
 @router.message(F.text == "Подсказка")
 async def helping_test(message:Message, state:FSMContext):
@@ -239,6 +272,13 @@ async def helping_test(message:Message, state:FSMContext):
         await state.update_data(current_index=current_index)
     else:
         await message.answer("Подсказки закончились!")
+
+@router.message(Command("stats"))
+async def check_stats(message:Message):
+    stats = await DB.select_user(message.from_user.id)
+    correct_answers = stats.correct_answers
+    incorrect_answers = stats.incorrect_answers
+    await message.answer(f"[Cтатистика - {message.from_user.first_name}]\nРешено задач: {correct_answers+incorrect_answers}\nРейтинг: {correct_answers*15 - incorrect_answers*10}\n✅ Правильных ответов: {correct_answers}\n❌ Неправильных ответов: {incorrect_answers}")
 
 @router.message(F.text)
 async def any_message(message: Message):

@@ -23,3 +23,7 @@ password_choose = ReplyKeyboardMarkup(keyboard=[
 more_info = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Чего?", callback_data="vt_info")],
 ])
+
+continue_or_no = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Продолжить")]
+], resize_keyboard=True, one_time_keyboard=True)

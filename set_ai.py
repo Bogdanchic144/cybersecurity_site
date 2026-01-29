@@ -1,11 +1,11 @@
 # from gigachat import GigaChat
 import openai
 from openai import AsyncOpenAI
-from config import AI_KEY
+from config import Config
 
 async def set_prompt(prompt, model_ai):
     client = AsyncOpenAI(
-        api_key=f"{AI_KEY}",
+        api_key=f"{Config.GEMINI_KEY}",
         base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
     )
 
