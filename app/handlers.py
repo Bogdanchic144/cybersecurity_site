@@ -1,4 +1,7 @@
 import asyncio
+
+import aiofiles
+
 import app.keyboards as kb
 
 
@@ -9,7 +12,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.enums import ParseMode
 
-from utils.password_generator import generate_passw
+from utils.password_generator import generation
 from utils.password_checker import checking
 from utils.analysis_vt import get_file_info
 from parce_meme import get_memes
@@ -51,52 +54,57 @@ async def password(message:Message):
     await message.answer("Здесь ты можешь проверить или сгенерировать пароль", reply_markup=kb.password_choose)
 
 @router.message(F.text == "Сгенерировать")
-async def gen_password(message: Message, state: FSMContext):
+async def get_length_password(message: Message, state: FSMContext):
     await state.clear()
     await message.answer("Длина пароля:")
     await state.set_state(UserState.password_len)
 
 @router.message(UserState.password_len)
-async def gen_password2(message: Message, state: FSMContext):
+async def generation_password(message: Message, state: FSMContext):
     try:
         await state.update_data(password_len=message.text)
         data = await state.get_data()
-        gen_pass = generate_passw(int(data["password_len"]))
-        if gen_pass == "Длина пароля должна быть не менее 8 и не более 100 символов":
-            await message.answer(f"{gen_pass}")
-        else:
-            await message.answer(f"{gen_pass}")
+        length_pass = int(data["password_len"])
+        result = generation(length_pass)
+
+        if result["code"] == 1:
+            await message.answer(f"{result["text"]}")
             await state.clear()
-    except:
-        await message.answer("Введите число!")
+        else:
+            await message.answer(f"{result["text"]}")
+
+    except ValueError:
+        await message.answer("Введите целое число!")
+    except Exception as e:
+        await message.answer(f"Неожиданныя ошибка!\n{e}")
 
 
 @router.message(F.text == "Проверить")
-async def check_password(message: Message, state: FSMContext):
+async def get_password(message: Message, state: FSMContext):
     await state.clear()
     await message.answer("Введите пароль, который хотите проверить:")
     await state.set_state(UserState.user_password)
 
 @router.message(UserState.user_password)
-async def check_password2(message: Message, state: FSMContext):
+async def check_password(message: Message, state: FSMContext):
     await state.update_data(user_password=message.text)
     data = await state.get_data()
     result = await checking(data["user_password"])
-    await message.answer(result)
-    if (result != "Пароль слишком распространен. Выберите более сложный пароль."
-            and result != "Слишком короткий пароль. Используйте минимум 8 символов."):
+    await message.answer(result["text"])
+    if result["code"] == 1:
         await state.clear()
 
 @router.message(Command("virus_total"))
 async def virus_total(message: Message, state: FSMContext):
     await state.clear()
-    msg = await message.answer("Отправьте мне файл, чтобы я его проверил!")
+    msg = await message.answer("Отправьте мне файл, чтобы я его проверил!", reply_markup=ReplyKeyboardRemove())
     await state.set_state(UserState.wait_file)
     await state.update_data(wait_file=[msg.message_id, message.chat.id])
 
 @router.message(UserState.wait_file)
 async def analys_file(message: Message, state: FSMContext, bot: Bot):
     if doc := message.document:
+        await state.clear()
         name: str = doc.file_name
         if doc.file_size < 20*1024*1024: # 20Mb
             await bot.download(doc.file_id, destination=f"app/total_files/{name}")
@@ -132,29 +140,24 @@ async def vt_info(callback: CallbackQuery):
 Обычно для известных легитимных файлов (системные файлы Windows, ПО с хорошей репутацией)."""
     await callback.message.answer(info)
 
+async def construct_request(path, state, message):
+    await state.clear()
+    async with aiofiles.open(f"{path}", "r", encoding='utf-8') as file:
+        prompt = await file.read()
+    await state.update_data(prompt_ai=prompt)
+    await message.answer("Выберете модель gemini", reply_markup=kb.model_ai_choose)
+
 @router.message(Command("virus_practice"))
 async def set_question(message: Message, state: FSMContext):
-    await state.clear()
-    with open("app/prompts/virus_prompt.txt", "r", encoding='utf-8') as file:
-        prompt = file.read()
-    await state.update_data(prompt_ai=prompt)
-    await message.answer("Выберете модель", reply_markup=kb.model_ai_choose)
+    await construct_request("app/prompts/virus_prompt.txt", state, message)
 
 @router.message(Command("safety_practice"))
 async def set_ask_safety(message: Message, state: FSMContext):
-    await state.clear()
-    with open("app/prompts/ask_safety_prompt.txt", "r", encoding='utf-8') as file:
-        prompt = file.read()
-    await state.update_data(prompt_ai=prompt)
-    await message.answer("Выберете модель", reply_markup=kb.model_ai_choose)
+    await construct_request("app/prompts/ask_safety_prompt.txt", state, message)
 
 @router.message(Command("tasks_practice"))
 async def set_task(message:Message, state: FSMContext):
-    await state.clear()
-    with open("app/prompts/task_secure_prompt.txt", "r", encoding='utf-8') as file:
-        prompt = file.read()
-    await state.update_data(prompt_ai=prompt)
-    await message.answer("Выберете модель", reply_markup=kb.model_ai_choose)
+    await construct_request("app/prompts/task_secure_prompt.txt", state, message)
 
 @router.callback_query(F.data.in_(["flash", "pro"]))
 async def set_flash(callback: CallbackQuery, state: FSMContext):
@@ -175,7 +178,7 @@ async def choose_challenge(callback: CallbackQuery, state: FSMContext):
 
     await state.update_data(challenge=challenge_choose)
     await callback.message.answer(
-        f"Ваш запрос:\n    {challenge_choose} задание\n    модель ai {model_ai}",
+        f"Ваш запрос:\n    {challenge_choose} задание\n    gemini {model_ai}",
         reply_markup=kb.continue_or_no
     )
 
