@@ -68,8 +68,187 @@
     color: white;
     text-decoration: none;
 }
+/* Планшеты и небольшие экраны */
+@media (max-width: 768px) {
+    .scammers-section {
+        padding: 20px 15px;
+    }
+
+    .container {
+        padding: 0 10px;
+    }
+
+    .scammers-hero h1 {
+        font-size: 2rem;
+    }
+
+    .scammers-subtitle {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+
+    .scammers-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        margin-left: 23px;
+    }
+
+    .scammers-card {
+        width: 100%;
+    }
+
+    .stat-card {
+        width: 100%;
+        order: -1; /* Изображение сверху */
+    }
+
+    .scammers-image {
+        max-width: 60%;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    .scammers-list {
+        padding-left: 20px;
+    }
+
+    .scammers-item {
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+    }
+
+    .tg-button2 {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .course-navigation3 {
+        gap: 10px;
+    }
+
+    .prev-btn,
+    .next-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Скрываем декоративные элементы на маленьких экранах */
+    .decoration.circle-1,
+    .decoration.circle-2 {
+        display: none;
+    }
+}
+
+/* Телефоны */
+@media (max-width: 480px) {
+    .scammers-section {
+        padding: 15px 10px;
+    }
+
+    .scammers-hero h1 {
+        font-size: 1.6rem;
+    }
+
+    .scammers-subtitle {
+        font-size: 1.3rem;
+        line-height: 1.5;
+    }
+
+    .scammers-card {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .scammers-list {
+        padding-left: 15px;
+    }
+
+    .scammers-item {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    .scammers-image {
+        max-width: 70%;
+    }
+
+    .tg-button2 {
+        padding: 12px 16px;
+        font-size: 16px;
+        max-width: 344px;
+        margin-left: -13px;
+        justify-content: center;
+        max-height: 25px;
+        width: 100%;
+        max-height: 31px;
+    }
+
+    .tg-button2 svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .course-navigation3 {
+        padding: 15px 0;
+        max-width: 30em;
+        margin-bottom: 14px;
+    }
+
+    .prev-btn,
+    .next-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 125px;
+        justify-content: center;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+    .scammers-hero h1 {
+        font-size: 1.4rem;
+    }
+
+    .scammers-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .scammers-item {
+        font-size: 0.8rem;
+    }
+
+    .tg-button2 {
+        font-size: 12px;
+        padding: 10px 14px;
+    }
+
+    .scammers-image {
+        max-width: 80%;
+    }
+}
 </style>
-      <div class="course-navigation">
+      <div class="course-navigation3">
         <a href="{% url 'menu:vir' %}" class="button prev-btn"> Назад</a>
         <a href="{% url 'menu:social_security' %}" class="button next-btn">Далее </a>
       </div>

@@ -10,6 +10,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вирусы - SafeSurf</title>
 </head>
+<style>
+    /* Планшеты и небольшие экраны */
+@media (max-width: 768px) {
+    .container_vir {
+        padding: 15px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .virus-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 0px;
+    }
+
+    .viruses-card-image_1,
+    .viruses-card-image_2,
+    .viruses-card-image_3 {
+        max-width: 80%;
+        margin: 20px auto;
+        display: block;
+    }
+
+    .sidebar-title {
+        font-size: 1.8rem;
+    }
+
+    .tips-title,
+    .info-title,
+    .antivirus-title {
+        font-size: 1.3rem;
+    }
+
+    .backup-info {
+        flex-direction: column;
+    }
+
+    .backup_section {
+        padding: 15px;
+    }
+
+    .antivirus-section {
+        flex-direction: column;
+    }
+
+    .antivirus-list-card {
+        width: 100%;
+    }
+
+    .course-navigation {
+        gap: 10px;
+    }
+
+    .prev-btn,
+    .next-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Телефоны */
+@media (max-width: 480px) {
+    .container_vir {
+        padding: 10px;
+    }
+
+    .sidebar-title {
+        font-size: 1.5rem;
+    }
+
+    .tips-title,
+    .info-title,
+    .antivirus-title {
+        font-size: 1.3rem;
+        margin-top: 2.2em;
+    }
+
+    .tips-list,
+    .antivirus-list {
+        padding-left: 15px;
+    }
+
+    .tip-item,
+    .antivirus-item {
+        font-size: 1.1rem;
+        margin-bottom: 0.8em !important;
+    }
+
+    .info-text {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .viruses-card-image_1,
+    .viruses-card-image_2,
+    .viruses-card-image_3 {
+        max-width: 100%;
+    }
+
+    .btn1 {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        max-width: 20em;
+        margin-left: 42px;
+    }
+    .btn2 {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        max-width: 20em;
+        margin-left: 29px;
+        margin-top: 48px;
+    }
+
+    .tg-button {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 14px;
+        text-align: center;
+        margin-left: -3px;
+        max-width: 20em;
+    }
+
+    .course-navigation {
+        padding: 15px 0;
+    }
+
+    .prev-btn,
+    .next-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 125px;
+        justify-content: center;
+    }
+
+    .tips-section,
+    .backup-info,
+    .antivirus-section {
+        border-radius: 10px;
+        margin-bottom: 15px;
+        gap: 0px;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+    .sidebar-title {
+        font-size: 1.3rem;
+    }
+
+    .tips-title,
+    .info-title,
+    .antivirus-title {
+        font-size: 1rem;
+    }
+
+    .tip-item,
+    .antivirus-item,
+    .info-text {
+        font-size: 0.85rem;
+    }
+}
+</style>
 <body>
     <div class="container_vir">
         <aside class="sidebar">
@@ -31,7 +199,7 @@
             </div>
         </div>
         <a href="{% url 'menu:virus-info' %}"  rel="noopener noreferrer">
-            <button class="btn">Подробнее</button>
+            <button class="btn1">Подробнее</button>
         </a>
         <section class="backup-info">
             <img class="viruses-card-image_2" src="{% static 'img/2_vir_card.svg' %}" alt="Изображение о резервном копировании">
@@ -50,7 +218,7 @@
                     <strong>Проверяйте копии:</strong> Периодически убеждайтесь, что ваши бэкапы рабочие и из них можно восстановить файлы.
                 </p>
                 <a href="{% url 'menu:backup-info' %}" rel="noopener noreferrer">
-                    <button class="btn">Подробнее</button>
+                    <button class="btn2">Подробнее</button>
                 </a>
             </div>
         </section>
