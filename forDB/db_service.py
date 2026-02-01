@@ -40,5 +40,3 @@ class DB:
                 user.incorrect_answers += add_incorrect_answer
 
                 await session.commit()
-            #     return user
-            # return None

@@ -22,13 +22,11 @@ class LoggingMiddleware(BaseMiddleware):
         event: Update,
         data: Dict[str, Any]
     ) -> Any:
-        # Логируем входящее событие
         if event.message:
             await self.log_message(event.message)
         elif event.callback_query:
             await self.log_callback(event.callback_query)
 
-        # Продолжаем обработку
         result = await handler(event, data)
         return result
 
@@ -54,25 +52,20 @@ dp.update.middleware(LoggingMiddleware())
 
 # НАСТРОЙКА ЛОГГИРОВАНИЯ
 def setup_logging():
-    # Сбрасываем все предыдущие обработчики
     logging.getLogger().handlers = []
 
-    # Настраиваем формат
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
 
-    # Создаем обработчик для консоли
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
 
-    # Настраиваем корневой логгер
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.INFO)
     root_logger.addHandler(console_handler)
 
-    # Устанавливаем уровень для SQLAlchemy (можно изменить на WARNING)
     logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 async def main():

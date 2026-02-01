@@ -8,4 +8,5 @@ class Config:
     BOT_TOKEN = os.getenv("BOT_TOKEN")
     GEMINI_KEY = os.getenv("GEMINI_KEY")
     VT_KEY = os.getenv("VT_KEY")
+    DEEPSEEK_KEY = os.getenv("DEEPSEEK_KEY")
 

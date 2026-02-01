@@ -4,7 +4,7 @@ import aiofiles
 
 import app.keyboards as kb
 
-
+from aiogram.filters.command import CommandObject
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
 from aiogram import Router, F, Bot
@@ -15,7 +15,6 @@ from aiogram.enums import ParseMode
 from utils.password_generator import generation
 from utils.password_checker import checking
 from utils.analysis_vt import get_file_info
-from parce_meme import get_memes
 from set_ai import set_prompt
 from forDB.db_service import DB
 
@@ -31,26 +30,53 @@ class UserState(StatesGroup):
     model_ai = State()
     challenge = State()
     wait_file = State()
+    ai_chat = State()
 
 router = Router()
-
+#                                                                                                             START_FUNC
 @router.message(CommandStart())
-async def cmd_start(message:Message, state:FSMContext):
+async def cmd_start(message:Message, state:FSMContext, command: CommandObject):
     await state.clear()
-    await message.answer((f"Привет! {(message.from_user.first_name + f" {message.from_user.last_name or ''}" )}"
-"\nЯ — твой персональный тренажёр по цифровой безопасности."
-"\nЗдесь ты можешь потренироваться распознавать мошенников, прокачать навыки защиты своих данных, "
-"проверим надёжность твоих паролей и научим безопасно вести себя в интернете."
-"\n\nЯ буду давать тебе задания: от лёгких до продвинутых, из реальных ситуаций и бытовых сценариев."
-"\nГотов проверить себя и стать чуть менее уязвимым в сети? 🚀"), reply_markup=ReplyKeyboardRemove())
     await DB.insert_user(message.from_user.id)
+    await asyncio.sleep(1)
 
-@router.message(Command("get_memes"))
-async def get_meme(message:Message):
-    await message.answer_photo(photo=get_memes())
+    params_to_func = {
+        "practice_viruses": {"func": set_question,
+                             "text": "Текст, который бот присылает после перехода по ссылке Вирусы (должен написать Максим)"},
+        "practice_passwords": {"func": password,
+                               "text": "Текст, который бот присылает после перехода по ссылке Пароли (должен написать Максим)"},
+        "practice_safety": {"func": set_ask_safety,
+                            "text": "Текст, который бот присылает после перехода по ссылке Беза в сети (должен написать Максим)"},
+        "practice_scummers": {"func": set_task,
+                           "text": "Текст, который бот присылает после перехода по ссылке Мошенники (должен написать Максим)"}
+    }
 
+    if command.args:
+        param = command.args
+        if param in params_to_func:
+            func = params_to_func[param]["func"]
+            text = params_to_func[param]["text"]
+            await message.answer(text)
+            await func(message, state)
+    else:
+        await message.answer((f"Привет! {(message.from_user.first_name + f" {message.from_user.last_name or ''}")}"
+                  "\nЯ — твой персональный тренажёр по цифровой безопасности."
+                  "\nЗдесь ты можешь потренироваться распознавать мошенников, прокачать навыки защиты своих данных, "
+                  "проверим надёжность твоих паролей и научим безопасно вести себя в интернете."
+                  "\n\nЯ буду давать тебе задания: от лёгких до продвинутых, из реальных ситуаций и бытовых сценариев."
+                  "\nГотов проверить себя и стать чуть менее уязвимым в сети? 🚀"),
+                 reply_markup=kb.all_functions)
+
+# @router.message(Command("write_ai"))
+# async def get_meme(message:Message, state: FSMContext):
+#     hello_ai = await set_prompt("Напиши приветствие и расскажи что ты умеешь", "flash")
+#     await message.answer(hello_ai)
+#     await state.set_state(UserState.ai_chat)
+#                                                                                                          PASSWORD_FUNC
+@router.message(F.text == "Пароли")
 @router.message(Command("password"))
-async def password(message:Message):
+async def password(message:Message, state: FSMContext):
+    await state.clear()
     await message.answer("Здесь ты можешь проверить или сгенерировать пароль", reply_markup=kb.password_choose)
 
 @router.message(F.text == "Сгенерировать")
@@ -93,11 +119,13 @@ async def check_password(message: Message, state: FSMContext):
     await message.answer(result["text"])
     if result["code"] == 1:
         await state.clear()
-
+#                                                                                                       VIRUS_TOTAL_FUNC
+@router.message(F.text == "Проверка файлов на вирусы")
 @router.message(Command("virus_total"))
 async def virus_total(message: Message, state: FSMContext):
     await state.clear()
-    msg = await message.answer("Отправьте мне файл, чтобы я его проверил!", reply_markup=ReplyKeyboardRemove())
+    msg = await message.answer("Отправьте мне файл, чтобы VirusTotal его проверил!",
+                               reply_markup=ReplyKeyboardRemove())
     await state.set_state(UserState.wait_file)
     await state.update_data(wait_file=[msg.message_id, message.chat.id])
 
@@ -139,7 +167,7 @@ async def vt_info(callback: CallbackQuery):
 Безопасный — Антивирус специально пометил файл как безопасный. 
 Обычно для известных легитимных файлов (системные файлы Windows, ПО с хорошей репутацией)."""
     await callback.message.answer(info)
-
+#                                                                                                          PRACTICE_FUNC
 async def construct_request(path, state, message):
     await state.clear()
     async with aiofiles.open(f"{path}", "r", encoding='utf-8') as file:
@@ -147,18 +175,21 @@ async def construct_request(path, state, message):
     await state.update_data(prompt_ai=prompt)
     await message.answer("Выберете модель gemini", reply_markup=kb.model_ai_choose)
 
+@router.message(F.text == "Безопасность в сети")
 @router.message(Command("virus_practice"))
 async def set_question(message: Message, state: FSMContext):
     await construct_request("app/prompts/virus_prompt.txt", state, message)
 
+@router.message(F.text == "Мошенники")
 @router.message(Command("safety_practice"))
 async def set_ask_safety(message: Message, state: FSMContext):
     await construct_request("app/prompts/ask_safety_prompt.txt", state, message)
 
+@router.message(F.text == "Вирусы")
 @router.message(Command("tasks_practice"))
 async def set_task(message:Message, state: FSMContext):
     await construct_request("app/prompts/task_secure_prompt.txt", state, message)
-
+#                                                                                                   choose-PRACTICE_FUNC
 @router.callback_query(F.data.in_(["flash", "pro"]))
 async def set_flash(callback: CallbackQuery, state: FSMContext):
     await state.update_data(model_ai=callback.data)
@@ -178,11 +209,12 @@ async def choose_challenge(callback: CallbackQuery, state: FSMContext):
 
     await state.update_data(challenge=challenge_choose)
     await callback.message.answer(
-        f"Ваш запрос:\n    {challenge_choose} задание\n    gemini {model_ai}",
+        f"Ваш запрос:\n    {challenge_choose} задание\n    gemini {model_ai}\n\n"
+        f"Нажмите 'Продолжить' для генерации задачи",
         reply_markup=kb.continue_or_no
     )
-
-@router.message(F.text == "Продолжить")
+#                                                                                               generation-PRACTICE_FUNC
+@router.message(F.text == "Сгенерировать")
 async def set_request(message: Message, state: FSMContext):
     data = await state.get_data()
 
@@ -196,7 +228,6 @@ async def set_request(message: Message, state: FSMContext):
     challenge_choose = data["challenge"]
     model = data["model_ai"]
 
-    # await message.answer(f"Генерирую {challenge_choose} задание... (Режим: {model})")
     to_delete = await message.answer("Секунду...")
     try:
         text_generation = await set_prompt(f"{data["prompt_ai"]}\nСоставь {challenge_choose} задание", model)
@@ -204,7 +235,7 @@ async def set_request(message: Message, state: FSMContext):
 
         if "Ошибка: " in text_generation:
             if "Error code: 429" in text_generation:
-                await message.answer("Токенов больше нет")
+                await message.answer("Токены закончились, выберите другую модель")
                 return
             else:
                 await message.answer(f"{text_generation}")
@@ -228,7 +259,7 @@ async def set_request(message: Message, state: FSMContext):
 
     except Exception as e:
         await message.answer(f"Произошла ошибка, перезапустите бота (/start) и попробуйте снова\n\nError:{e}")
-
+#                                                                                                   yes/no-PRACTICE_FUNC
 @router.message(UserState.waiting_for_answer, F.text.in_(["Да", "Нет"]))
 async def check_answer(message:Message, state: FSMContext):
     data = await state.get_data()
@@ -242,8 +273,7 @@ async def check_answer(message:Message, state: FSMContext):
     else:
         await message.answer(f"Неправильно❌\n{explanation}", reply_markup=kb.continue_or_no)
         await DB.update_data(message.from_user.id, add_incorrect_answer=1)
-
-
+#                                                                                                    hints-PRACTICE_FUNC
 @router.message(F.text == "Подсказка")
 async def helping_test(message:Message, state:FSMContext):
     data = await state.get_data()
@@ -275,16 +305,26 @@ async def helping_test(message:Message, state:FSMContext):
         await state.update_data(current_index=current_index)
     else:
         await message.answer("Подсказки закончились!")
-
+#                                                                                                                  STATS
+@router.message(F.text == "Статистика")
 @router.message(Command("stats"))
 async def check_stats(message:Message):
     stats = await DB.select_user(message.from_user.id)
     correct_answers = stats.correct_answers
     incorrect_answers = stats.incorrect_answers
-    await message.answer(f"[Cтатистика - {message.from_user.first_name}]\nРешено задач: {correct_answers+incorrect_answers}\nРейтинг: {correct_answers*15 - incorrect_answers*10}\n✅ Правильных ответов: {correct_answers}\n❌ Неправильных ответов: {incorrect_answers}")
-
+    await message.answer(f"[Cтатистика {message.from_user.first_name}]\n"
+                         f"Решено задач: {correct_answers+incorrect_answers}\n"
+                         f"Рейтинг: {correct_answers*15 - incorrect_answers*10}\n"
+                         f"✅ Правильных ответов: {correct_answers}"
+                         f"\n❌ Неправильных ответов: {incorrect_answers}")
+#                                                                                                                  OTHER
 @router.message(F.text)
 async def any_message(message: Message):
-    await message.answer("Эээ...")
-    await asyncio.sleep(1)
-    await message.answer("эт че?")
+    await message.answer("Список доступных команд:"
+                         "\n"
+                         "\n/password - Помогу с паролями"
+                         "\n/safety_practice - Проверю твою гигиену в сети"
+                         "\n/tasks_practice - Смоделирую ситуацию фишинговой атаки"
+                         "\n/virus_practice - Протестируй свои знания о вирусах"
+                         "\n/stats - Посмотри свою статистику"
+                         "\n\nИли /start где все функции будут представлены в виде кнопок")
