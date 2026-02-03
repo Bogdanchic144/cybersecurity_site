@@ -25,7 +25,7 @@ more_info = InlineKeyboardMarkup(inline_keyboard=[
 ])
 
 continue_or_no = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text="Сгенерировать")]
+    [KeyboardButton(text="Продолжить")]
 ], resize_keyboard=True, one_time_keyboard=True)
 
 all_functions = ReplyKeyboardMarkup(keyboard=[

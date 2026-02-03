@@ -47,7 +47,7 @@ async def cmd_start(message:Message, state:FSMContext, command: CommandObject):
                                "text": "Текст, который бот присылает после перехода по ссылке Пароли (должен написать Максим)"},
         "practice_safety": {"func": set_ask_safety,
                             "text": "Текст, который бот присылает после перехода по ссылке Беза в сети (должен написать Максим)"},
-        "practice_scummers": {"func": set_task,
+        "tasks_practice": {"func": set_task,
                            "text": "Текст, который бот присылает после перехода по ссылке Мошенники (должен написать Максим)"}
     }
 
@@ -214,7 +214,7 @@ async def choose_challenge(callback: CallbackQuery, state: FSMContext):
         reply_markup=kb.continue_or_no
     )
 #                                                                                               generation-PRACTICE_FUNC
-@router.message(F.text == "Сгенерировать")
+@router.message(F.text == "Продолжить")
 async def set_request(message: Message, state: FSMContext):
     data = await state.get_data()
 
