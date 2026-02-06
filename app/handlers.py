@@ -4,6 +4,8 @@ import aiofiles
 
 import app.keyboards as kb
 
+import os
+
 from aiogram.filters.command import CommandObject
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
@@ -135,6 +137,8 @@ async def analys_file(message: Message, state: FSMContext, bot: Bot):
         await state.clear()
         name: str = doc.file_name
         if doc.file_size < 20*1024*1024: # 20Mb
+            if not os.path.isdir("app/total_files"):
+                os.mkdir("app/total_files")
             await bot.download(doc.file_id, destination=f"app/total_files/{name}")
             await message.answer("Файл загружен! Анализирую файл...")
 
