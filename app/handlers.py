@@ -109,10 +109,10 @@ async def generation_password(message: Message, state: FSMContext):
         result = generation(length_pass)
 
         if result["code"] == 1:
-            await message.answer(f"{result["text"]}")
+            await message.answer(result["text"])
             await state.clear()
         else:
-            await message.answer(f"{result["text"]}")
+            await message.answer(result["text"])
 
     except ValueError:
         await message.answer("Введите целое число!")
@@ -253,7 +253,7 @@ async def get_ai_text(message, state) -> dict | None:
     model = data["model_ai"]
     path_task = data["path_task"]
 
-    async with aiofiles.open(f"{path_task + challenge_choose + ".txt"}", "r", encoding='utf-8') as file:
+    async with aiofiles.open(f"{path_task + challenge_choose + '.txt'}", "r", encoding='utf-8') as file:
         prompt = await file.read()
 
     max_retries = 5
