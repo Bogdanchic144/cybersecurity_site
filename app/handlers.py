@@ -63,7 +63,7 @@ async def cmd_start(message:Message, state:FSMContext, command: CommandObject):
             await message.answer(text)
             await func(message, state)
         else:
-            await message.answer((f"Привет! {(message.from_user.first_name + f" {message.from_user.last_name or ''}")}"
+            await message.answer((f"Привет! {(message.from_user.last_name or message.from_user.first_name)}"
                                   "\nЯ — твой персональный тренажёр по цифровой безопасности."
                                   "\nЗдесь ты можешь потренироваться распознавать мошенников, прокачать навыки защиты своих данных, "
                                   "проверим надёжность твоих паролей и научим безопасно вести себя в интернете."
@@ -71,7 +71,7 @@ async def cmd_start(message:Message, state:FSMContext, command: CommandObject):
                                   "\nГотов проверить себя и стать чуть менее уязвимым в сети? 🚀"),
                                  reply_markup=kb.all_functions)
     else:
-        await message.answer((f"Привет! {(message.from_user.first_name + f" {message.from_user.last_name or ''}")}"
+        await message.answer((f"Привет! {(message.from_user.last_name or message.from_user.first_name)}"
                   "\nЯ — твой персональный тренажёр по цифровой безопасности."
                   "\nЗдесь ты можешь потренироваться распознавать мошенников, прокачать навыки защиты своих данных, "
                   "проверим надёжность твоих паролей и научим безопасно вести себя в интернете."
