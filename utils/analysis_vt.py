@@ -31,7 +31,7 @@ def escape_markdown_v2(text: str) -> str:
 
 async def get_file_info(file_name: str) -> str:
     script_dir = Path(__file__).parent.parent
-    target_dir = script_dir / "app" / "total_files"
+    target_dir = script_dir / "app"
 
     all_path = list(target_dir.iterdir())
     if not all_path:

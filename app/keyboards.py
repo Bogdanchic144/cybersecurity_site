@@ -1,4 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 levels = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Сложно", callback_data="hard")],
@@ -7,8 +8,8 @@ levels = InlineKeyboardMarkup(inline_keyboard=[
 ])
 
 model_ai_choose = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="Flash", callback_data="flash")],
-    [InlineKeyboardButton(text="Pro", callback_data="pro")]
+    [InlineKeyboardButton(text="2.5", callback_data="gemini-2.5-flash")],
+    [InlineKeyboardButton(text="3", callback_data="gemini-3-flash-preview")]
 ])
 
 user_answer = ReplyKeyboardMarkup(keyboard=[
@@ -18,7 +19,7 @@ user_answer = ReplyKeyboardMarkup(keyboard=[
 
 password_choose = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Сгенерировать"), KeyboardButton(text="Проверить")]
-], resize_keyboard=True)
+], resize_keyboard=True, input_field_placeholder="Выберите функцию")
 
 more_info = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="Чего?", callback_data="vt_info")],
@@ -26,7 +27,7 @@ more_info = InlineKeyboardMarkup(inline_keyboard=[
 
 continue_or_no = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Продолжить")]
-], resize_keyboard=True, one_time_keyboard=True)
+], resize_keyboard=True, one_time_keyboard=True, input_field_placeholder="Нажмите \"Продолжить\"")
 
 all_functions = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Пароли")],
@@ -35,4 +36,10 @@ all_functions = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Вирусы")],
     [KeyboardButton(text="Статистика")],
     [KeyboardButton(text="Проверка файлов на вирусы")]
-], resize_keyboard=True, one_time_keyboard=True)
+], resize_keyboard=True, one_time_keyboard=True, input_field_placeholder="Выберите пункт меню")
+
+async def button_answers(list_buttons: list) -> ReplyKeyboardMarkup:
+    keyboard = ReplyKeyboardBuilder()
+    for button in list_buttons:
+        keyboard.add(KeyboardButton(text=button))
+    return keyboard.adjust(1).as_markup(resize_keyboard=True)
