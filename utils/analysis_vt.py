@@ -125,7 +125,7 @@ def format_analysis_result(analysis_data) -> str:
         if result['category'] in ['malicious', 'suspicious'] and result['result']:
             detections.append(escape_markdown_v2(
                                                 f"    • {av_name}:") +
-                                                f"_{escape_markdown_v2(f' {result['result']}')}_"
+                                                f"""_{escape_markdown_v2(f" {result['result']}")}_"""
                                                  )
 
     if detections:
