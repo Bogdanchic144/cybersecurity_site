@@ -1,6 +1,11 @@
 import string
 
-async def checking(password: str) -> dict:
+
+
+with open("pop_passwords.txt", "r") as file:
+    weak_passwords = file.readlines()
+
+def checking(password: str) -> dict:
     """
     Критерии:
     - Длина не менее 8 символов
@@ -13,12 +18,11 @@ async def checking(password: str) -> dict:
     }
 
     if len(password) < 8:
-        result["text"] = "Слишком короткий пароль. Используйте минимум 8 символов."
+        result["text"] = "Слишком короткий пароль. Используйте минимум 8 символов:"
         return result
 
-    weak_passwords = ["123456", "123456789", "12345678", "password", "qwerty123", "qwerty1", "111111", "12345", "Secret", "123123", "1234567890", "1234567", "000000", "qwerty", "abc123", "password1", "iloveyou", "11111111", "dragon", "monkey"]
     if password.lower() in weak_passwords:
-        result["text"] = "Пароль слишком распространен. Выберите более сложный пароль."
+        result["text"] = "Пароль слишком распространен. Выберите более сложный пароль:"
         return result
 
     has_upper = any(c.isupper() for c in password)  # есть заглавные буквы

@@ -1,5 +1,8 @@
 import string
 from random import randint
+
+
+
 with open("utils/data/words.txt", "r") as f:
     sps_word = sorted([word for word in f.read().splitlines()], key=len)
 

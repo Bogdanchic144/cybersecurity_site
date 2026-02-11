@@ -109,10 +109,10 @@ async def generation_password(message: Message, state: FSMContext):
         result = generation(length_pass)
 
         if result["code"] == 1:
-            await message.answer(result["text"])
+            await message.answer(result["text"], reply_markup=kb.password_choose)
             await state.clear()
         else:
-            await message.answer(result["text"])
+            await message.answer((result["text"]))
 
     except ValueError:
         await message.answer("Введите целое число!")
@@ -129,7 +129,7 @@ async def get_password(message: Message, state: FSMContext):
 async def check_password(message: Message, state: FSMContext):
     await state.update_data(user_password=message.text)
     data = await state.get_data()
-    result = await checking(data["user_password"])
+    result = checking(data["user_password"])
     await message.answer(result["text"])
     if result["code"] == 1:
         await state.clear()
