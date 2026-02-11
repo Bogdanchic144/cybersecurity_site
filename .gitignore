@@ -2,7 +2,7 @@
 
 .venv/
 
-files/test.py
+files
 
 __pycache__/
 *.pyc
@@ -10,3 +10,5 @@ __pycache__/
 *.pyd
 
 .idea/
+
+bot.db
