@@ -2,7 +2,7 @@ import string
 
 
 
-with open("pop_passwords.txt", "r") as file:
+with open("utils/data/pop_passwords.txt", "r") as file:
     weak_passwords = file.readlines()
 
 def checking(password: str) -> dict:

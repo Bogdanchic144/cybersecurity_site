@@ -15,7 +15,7 @@ from aiogram.enums import ParseMode
 from utils.password_generator import generation
 from utils.password_checker import checking
 from utils.analysis_vt import get_file_info
-from set_ai import set_prompt
+from set_ai import send_prompt
 from forDB.db_service import DB
 
 
@@ -194,7 +194,10 @@ async def vt_info(callback: CallbackQuery):
 async def construct_request(message: Message, state: FSMContext, path):
     await state.clear()
     await state.update_data(path_task=path)
-    await message.answer("Выберете модель gemini", reply_markup=kb.model_ai_choose)
+    await message.answer("Выберете модель gigachat"
+                         "\n(Для лучшего опыта выберите модель Pro, "
+                         "остальные модели нестабильны и могу вызывать ошибки",
+                         reply_markup=kb.model_ai_choose)
 
 @router.message(F.text == "Вирусы")
 @router.message(Command("viruses_practice"))
@@ -218,7 +221,7 @@ async def set_scum(message:Message, state: FSMContext):
 
 #                                                                                                   choose-PRACTICE_FUNC
 
-@router.callback_query(F.data.in_(["gemini-2.5-flash", "gemini-3-flash-preview"]))
+@router.callback_query(F.data.in_(["GigaChat-2", "GigaChat-2-Pro", "GigaChat-2-Max"]))
 async def set_model(callback: CallbackQuery, state: FSMContext):
     await state.update_data(model_ai=callback.data)
     await callback.message.answer("Выберете сложность", reply_markup=kb.levels)
@@ -261,9 +264,12 @@ async def get_ai_text(message, state) -> dict | None:
     to_delete = await message.answer("Секунду...", reply_markup=ReplyKeyboardRemove())
     for attempt in range(max_retries):
         try:
-            text_generation = await set_prompt(f"{prompt}", model) if challenge_choose != "hard" else "" #УДАЛИТЬ!
+            text_generation = await send_prompt(prompt, model) if \
+                (path_task + challenge_choose != 'app/prompts/virus/hard') \
+                else "1-----2-----3-----4-----5" #УДАЛИТЬ! после реализации
             print(text_generation)
             # запрос ии
+
             # async with aiofiles.open(f"files/test.txt", "r", encoding='utf-8') as file:
             #     text_generation = await file.read()
 
@@ -316,7 +322,7 @@ async def set_request(message: Message, state: FSMContext):
 
     async def scum_func(text: str, challenge: str):
         await message.answer("Это альфа версия задач по мошенникам, новая версия в разработке...")
-        part_text = text.split(":::::")
+        part_text = text.split("-----")
         task = part_text[0]
         question = part_text[1]
 
@@ -328,7 +334,7 @@ async def set_request(message: Message, state: FSMContext):
     async def virus_func(text: str, challenge: str):
 
         async def easy_func(etext: str):
-            part_text = etext.split(":::::")
+            part_text = etext.split("-----")
             question = part_text[0]
             answer_option = []
             correct_answer = part_text[1]
@@ -348,7 +354,7 @@ async def set_request(message: Message, state: FSMContext):
             await state.set_state(UserState.waiting_for_answer)
 
         async def medium_func(mtext: str):
-            part_text = mtext.split(":::::")
+            part_text = mtext.split("-----")
             question = part_text[0]
             raw_answer_option = part_text[1]
             correct_answer = part_text[2]
@@ -383,7 +389,7 @@ async def set_request(message: Message, state: FSMContext):
 
     async def safety_func(text: str, challenge: str):
         await message.answer("Это альфа версия задач по безопасности в сети, новая версия в разработке...")
-        part_text = text.split(":::::")
+        part_text = text.split("-----")
         task = part_text[0]
         question = part_text[1]
 

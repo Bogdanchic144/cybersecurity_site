@@ -8,8 +8,9 @@ levels = InlineKeyboardMarkup(inline_keyboard=[
 ])
 
 model_ai_choose = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="2.5", callback_data="gemini-2.5-flash")],
-    [InlineKeyboardButton(text="3", callback_data="gemini-3-flash-preview")]
+    [InlineKeyboardButton(text="Max", callback_data="GigaChat-2-Max")],
+    [InlineKeyboardButton(text="Pro", callback_data="GigaChat-2-Pro")],
+    [InlineKeyboardButton(text="Lite", callback_data="GigaChat-2")],
 ])
 
 user_answer = ReplyKeyboardMarkup(keyboard=[
