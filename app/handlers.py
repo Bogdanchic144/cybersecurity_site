@@ -378,6 +378,7 @@ async def set_request(message: Message, state: FSMContext):
 
         async def hard_func(htext: str):
             await message.answer("🛠️ 'Практика по вирусам - сложно' находится в разработке...")
+            await message.answer("Но вы можете попробовать другую сложность в данной практике")
 
         challenge_dict = {
             "easy": easy_func,
