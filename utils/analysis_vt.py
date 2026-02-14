@@ -33,9 +33,9 @@ async def get_file_info(file_name: str) -> str:
     script_dir = Path(__file__).parent.parent
     target_dir = script_dir / "app"
 
-    all_path = list(target_dir.iterdir())
-    if not all_path:
-        print("Директория пуста!")
+    all_path = target_dir / file_name
+    if not all_path.is_file():
+        print("Файл не найден!")
         return r"Произошла ошибка\, файл не обнаружен \(возможно такой файл не поддерживается\)"
 
     file_path = all_path[0]

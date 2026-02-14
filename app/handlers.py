@@ -194,9 +194,9 @@ async def vt_info(callback: CallbackQuery):
 async def construct_request(message: Message, state: FSMContext, path):
     await state.clear()
     await state.update_data(path_task=path)
-    await message.answer("Выберете модель gigachat"
+    await message.answer("Выберите модель gigachat"
                          "\n(Для лучшего опыта выберите модель Pro, "
-                         "остальные модели нестабильны и могу вызывать ошибки",
+                         "остальные модели нестабильны и могут вызывать ошибки",
                          reply_markup=kb.model_ai_choose)
 
 @router.message(F.text == "Вирусы")
@@ -505,7 +505,7 @@ async def any_message(message: Message):
                          "\n"
                          "\n/password - Помогу с паролями"
                          "\n/safety_practice - Проверю твою гигиену в сети"
-                         "\n/tasks_practice - Смоделирую ситуацию фишинговой атаки"
-                         "\n/virus_practice - Протестируй свои знания о вирусах"
+                         "\n/scummers_practice - Смоделирую ситуацию фишинговой атаки"
+                         "\n/viruses_practice - Протестируй свои знания о вирусах"
                          "\n/stats - Посмотри свою статистику"
                          "\n\nИли /start где все функции будут представлены в виде кнопок")
