@@ -46,7 +46,7 @@ def checking(password: str) -> dict:
                        "s":"специальные символы"
                        }
 
-    first_recommendation = recommendations[score[0]] if score != [] else ""
+    first_recommendation = recommendations[score[0]] if len(score) > 0 else ""
     second_recommendation = recommendations[score[1]] if len(score) > 1 else ""
 
     result_text = {
