@@ -468,13 +468,14 @@ async def analys_file(message: Message, state: FSMContext, bot: Bot):
     if doc := message.document:
         await state.clear()
         name: str = doc.file_name
-        bot_msg = await message.answer("💾 Скачиваю файл...")
+        bot_msg = await message.answer("💾 Скачиваю файл... (Это может занимать значительное время из-за замедления "
+                                       "Telegram на территории РФ)")
         if doc.file_size < 20*1024*1024: # 20Mb
             try:
                 await bot.download(doc.file_id, destination=f"app/{name}", timeout=300)
             except TimeoutError:
                 await bot_msg.edit_text("Ошибка скачивания ⚠️")
-                await message.answer("К сожалению, telegram в России замедляют и иногда файлы "
+                await message.answer("К сожалению, Telegram в России замедляют и иногда файлы "
                                      "не могут загрузиться на сервер за определенное время, сейчас это и произошло.")
                 await message.answer("Вы можете попробовать ещё раз /virus_total")
                 delete_file(name=name)
