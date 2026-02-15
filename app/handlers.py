@@ -14,7 +14,7 @@ from aiogram.enums import ParseMode
 
 from utils.password_generator import generation
 from utils.password_checker import checking
-from utils.analysis_vt import get_file_info
+from utils.analysis_vt import get_file_info, delete_file
 from set_ai import send_prompt
 from forDB.db_service import DB
 
@@ -472,13 +472,17 @@ async def analys_file(message: Message, state: FSMContext, bot: Bot):
         if doc.file_size < 20*1024*1024: # 20Mb
             try:
                 await bot.download(doc.file_id, destination=f"app/{name}", timeout=300)
-            except Exception as e:
+            except TimeoutError:
                 await bot_msg.edit_text("Ошибка скачивания ⚠️")
                 await message.answer("К сожалению, telegram в России замедляют и иногда файлы "
                                      "не могут загрузиться на сервер за определенное время, сейчас это и произошло.")
                 await message.answer("Вы можете попробовать ещё раз /virus_total")
-                await message.answer(str(e))
+                delete_file(name=name)
                 return
+            except Exception as e:
+                await message.answer(f"❌ Произошла ошибка: {type(e).__name__}")
+                print(e, flush=True)
+
             await bot_msg.edit_text("📁 Файл загружен! Анализирую файл...")
 
             result = await get_file_info(name)

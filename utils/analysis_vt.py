@@ -29,6 +29,13 @@ def escape_markdown_v2(text: str) -> str:
 
     return text.translate(translation_table)
 
+def delete_file(name: str):
+    script_dir = Path(__file__).parent.parent
+    target_dir = script_dir / "app"
+    file_path = target_dir / name
+    if file_path.is_file():
+        file_path.unlink()
+
 async def get_file_info(file_name: str) -> str:
     script_dir = Path(__file__).parent.parent
     target_dir = script_dir / "app"
