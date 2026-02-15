@@ -10,7 +10,7 @@ from forDB.db_service import DB
 from typing import Callable, Dict, Any, Awaitable
 from aiogram import BaseMiddleware
 from aiogram.types import Update, Message, CallbackQuery
-
+from aiohttp import ClientTimeout
 
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ class LoggingMiddleware(BaseMiddleware):
         logger.info(f"Получен коллбэк: {log_data}")
 
 
-bot = Bot(token=Config.BOT_TOKEN)
+bot = Bot(token=Config.BOT_TOKEN, timeout=ClientTimeout(total=120))
 dp = Dispatcher()
 dp.update.middleware(LoggingMiddleware())
 
