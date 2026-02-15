@@ -3,6 +3,8 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from config import Config
 
+
+
 TOKEN = Config.BOT_TOKEN
 
 bot = Bot(token=TOKEN)
@@ -21,4 +23,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-

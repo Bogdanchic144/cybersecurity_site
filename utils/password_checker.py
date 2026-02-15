@@ -43,14 +43,17 @@ def checking(password: str) -> dict:
     recommendations = {"u":"заглавные буквы",
                        "l":"маленькие буквы",
                        "d":"цифры",
-                       "s":"специальные символы"
-                    }
+                       "s":"специальные символы"}
+
+    first_recommendation = recommendations[score[0]] if score != [] else ""
+    second_recommendation = recommendations[score[1]] if len(score) > 1 else ""
+
     result_text = {
-    0: "4/4 Отличный пароль!",
-    1: f"3/4 Хороший пароль\nСовет: Добавьте {recommendations[score[0]]}",
-    2: f"2/4 Слабый пароль\nСовет: Добавьте {recommendations[score[0]]} и {recommendations[score[1]]}",
-    3: "1/4 Очень слабый пароль. Используйте разные типы символов.",
-    4: "0/4 Как?"
+        0: "4/4 Отличный пароль!",
+        1: f"3/4 Хороший пароль\nСовет: Добавьте {first_recommendation}",
+        2: f"2/4 Слабый пароль\nСовет: Добавьте {first_recommendation} и {second_recommendation}",
+        3: "1/4 Очень слабый пароль. Используйте разные типы символов.",
+        4: "0/4 ..."
     }
 
     result["text"] = result_text[len(score)]

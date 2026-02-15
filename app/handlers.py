@@ -23,7 +23,7 @@ from forDB.db_service import DB
 class UserState(StatesGroup):
     waiting_for_answer = State()
     correct_answer_virus = State()
-    hints_response = State()
+    parts_text = State()
     current_index = State()
     user_password = State()
     password_len = State()
@@ -35,6 +35,12 @@ class UserState(StatesGroup):
     explanation = State()
 
 router = Router()
+
+practice_keys = {
+    "scum": ["task", "question", "answer", "explanation", "hints"],
+    "safety": ["task", "question", "answer", "explanation", "hints"],
+    "virus": ["question", "answers_options", "answer", "explanation"]
+}
 
 #                                                                                                             START_FUNC
 
@@ -100,39 +106,11 @@ async def get_length_password(message: Message, state: FSMContext):
     await message.answer("Длина пароля:")
     await state.set_state(UserState.password_len)
 
-@router.message(UserState.password_len)
-async def generation_password(message: Message, state: FSMContext):
-    try:
-        await state.update_data(password_len=message.text)
-        data = await state.get_data()
-        length_pass = int(data["password_len"])
-        result = generation(length_pass)
-
-        if result["code"] == 1:
-            await message.answer(result["text"], reply_markup=kb.password_choose)
-            await state.clear()
-        else:
-            await message.answer((result["text"]))
-
-    except ValueError:
-        await message.answer("Введите целое число!")
-    except Exception as e:
-        await message.answer(f"Неожиданныя ошибка!\n{e}")
-
 @router.message(F.text == "Проверить")
 async def get_password(message: Message, state: FSMContext):
     await state.clear()
     await message.answer("Введите пароль, который хотите проверить:")
     await state.set_state(UserState.user_password)
-
-@router.message(UserState.user_password)
-async def check_password(message: Message, state: FSMContext):
-    await state.update_data(user_password=message.text)
-    data = await state.get_data()
-    result = checking(data["user_password"])
-    await message.answer(result["text"])
-    if result["code"] == 1:
-        await state.clear()
 
 #                                                                                                       VIRUS_TOTAL_FUNC
 
@@ -144,34 +122,6 @@ async def virus_total(message: Message, state: FSMContext):
                                reply_markup=ReplyKeyboardRemove())
     await state.set_state(UserState.wait_file)
     await state.update_data(wait_file=[msg.message_id, message.chat.id])
-
-@router.message(UserState.wait_file)
-async def analys_file(message: Message, state: FSMContext, bot: Bot):
-    if doc := message.document:
-        await state.clear()
-        name: str = doc.file_name
-        if doc.file_size < 20*1024*1024: # 20Mb
-            await bot.download(doc.file_id, destination=f"app/{name}")
-            await message.answer("Файл загружен! Анализирую файл...")
-
-            result = await get_file_info(name)
-            result = result.split("#S0S#")
-            part_one = result[0]
-            part_two = result[1]
-            part_three = result[2]
-            await message.answer(part_one, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.more_info)
-            await message.answer(part_two, parse_mode=ParseMode.MARKDOWN_V2)
-            await message.answer(part_three, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.all_functions)
-        else:
-            await message.answer(f"Файл слишком большой (Лимит 20Мб)")
-            await message.answer('Вы можете его проверить на сайте '
-                                 '[VirusTotal](https://www.virustotal.com/gui/home/upload)',
-                                parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.all_functions)
-
-    else:
-        data = await state.get_data()
-        mess = data["wait_file"]
-        await bot.send_message(mess[1], ".", reply_to_message_id=mess[0])
 
 @router.callback_query(F.data == "vt_info")
 async def vt_info(callback: CallbackQuery):
@@ -202,21 +152,24 @@ async def construct_request(message: Message, state: FSMContext, path):
 @router.message(F.text == "Вирусы")
 @router.message(Command("viruses_practice"))
 async def set_virus(message: Message, state: FSMContext):
-    await message.answer("В этом разделе вы отработаете навыки распознания вредоносных файлов с вирусами.")
+    await message.answer("В этом разделе вы отработаете навыки распознания вредоносных файлов с вирусами.",
+                         reply_markup=ReplyKeyboardRemove())
     await construct_request(message, state, "app/prompts/virus/")
 
 @router.message(F.text == "Безопасность в сети")
 @router.message(Command("safety_practice"))
 async def set_safety(message: Message, state: FSMContext):
     await message.answer("В этом разделе вы проанализируете реальные кейсы киберугроз и "
-                         "освоите практические навыки для защиты в интернете.")
+                         "освоите практические навыки для защиты в интернете.",
+                         reply_markup=ReplyKeyboardRemove())
     await construct_request(message, state, "app/prompts/safety/")
 
 @router.message(F.text == "Мошенники")
 @router.message(Command("scummers_practice"))
 async def set_scum(message:Message, state: FSMContext):
     await message.answer("Здесь вы научитесь распознавать мошеннические схемы и "
-                         "принимать правильные решения в опасных ситуациях.")
+                         "принимать правильные решения в опасных ситуациях.",
+                         reply_markup=ReplyKeyboardRemove())
     await construct_request(message, state, "app/prompts/scum/")
 
 #                                                                                                   choose-PRACTICE_FUNC
@@ -232,10 +185,12 @@ async def set_challenge(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     challenge_choose = callback.data
     model_ai = data["model_ai"]
+    path_task = data["path_task"]
+    name_task = path_task.split("/")[-2]
 
     await state.update_data(challenge=challenge_choose)
     await callback.message.answer(
-        f"Ваш запрос:\n⚙️ {challenge_choose} task\n🤖 {model_ai}\n\n"
+        f"Ваш запрос:\n📚 {name_task.capitalize()} practice\n⚙️ {challenge_choose.capitalize()} task\n🤖 {model_ai}\n\n"
         f"Нажмите 'Продолжить' для генерации задачи",
         reply_markup=kb.continue_or_no
     )
@@ -245,7 +200,7 @@ async def set_challenge(callback: CallbackQuery, state: FSMContext):
 async def get_ai_text(message, state) -> dict | None:
     data = await state.get_data()
 
-    if ("challenge" not in data) or ("model_ai" not in data):
+    if ("challenge" not in data) or ("model_ai" not in data) or ("path_task" not in data):
         await message.answer(
             "Произошла ошибка. Начните заново /start",
             reply_markup=ReplyKeyboardRemove()
@@ -319,64 +274,66 @@ class TextInListFilter(Filter):
 
 @router.message(F.text == "Продолжить")
 async def set_request(message: Message, state: FSMContext):
+    await state.update_data(current_index=0)
 
-    async def scum_func(text: str, challenge: str):
+    async def scum_func(parts_text: dict, challenge: str):
         await message.answer("Это альфа версия задач по мошенникам, новая версия в разработке...")
-        part_text = text.split("-----")
-        task = part_text[0]
-        question = part_text[1]
 
-        await state.update_data(hints_response=part_text)
+        task = parts_text["task"]
+        question = parts_text["question"]
+
+        await state.update_data(parts_text=parts_text)
         await state.set_state(UserState.waiting_for_answer)
         await message.answer(task)
         await message.answer(question, reply_markup=kb.user_answer)
 
-    async def virus_func(text: str, challenge: str):
+    async def virus_func(parts_text: dict, challenge: str):
 
-        async def easy_func(etext: str):
-            part_text = etext.split("-----")
-            question = part_text[0]
-            answer_option = []
-            correct_answer = part_text[1]
+        async def easy_func(etext: dict):
+            question = etext["question"]
+            raw_answers_options = etext["answers_options"]
+            answers_options = []
 
             n = 1
-            while f"#{n}#" in question:
-                start = question.find(f"#{n}#") + 3
-                end = question.find(f"#{n + 1}#")
+            while f"#{n}#" in raw_answers_options:
+                start = raw_answers_options.find(f"#{n}#") + 3
+                end = raw_answers_options.find(f"#{n + 1}#")
 
-                answer_option.append(f"{n}) " + question[start:end].strip())
-                question = question.replace(question[start-3:end], f"\n{n}) {question[start:end]}")
+                answers_options.append(f"{n}) " + raw_answers_options[start:end].strip())
+                raw_answers_options = raw_answers_options.replace(
+                    raw_answers_options[start-3:end], # old
+                    f"\n{n}) {raw_answers_options[start:end]}" # new
+                )
                 n += 1
 
-            await message.answer(question, reply_markup=await kb.button_answers(answer_option))
-            await state.update_data(waiting_for_answer=answer_option)
-            await state.update_data(correct_answer_virus=correct_answer)
+            await message.answer(text=(question + "\n" + raw_answers_options),
+                                 reply_markup=await kb.button_answers(answers_options))
+            await state.update_data(waiting_for_answer=answers_options)
+            await state.update_data(parts_text=parts_text)
             await state.set_state(UserState.waiting_for_answer)
 
-        async def medium_func(mtext: str):
-            part_text = mtext.split("-----")
-            question = part_text[0]
-            raw_answer_option = part_text[1]
-            correct_answer = part_text[2]
-            explanation = part_text[3]
+        async def medium_func(mtext: dict):
+            question = mtext["question"]
+            raw_answers_options = mtext["answers_options"]
+            correct_answer = mtext["answer"]
 
-            answer_option = []
+            answers_options = []
             n = 1
-            while f"#{n}#" in raw_answer_option:
-                begin = raw_answer_option.find(f"#{n}#") + 3
-                end = raw_answer_option.find(f"#{n + 1}#")
-                answer_option.append(f"{n}) " + raw_answer_option[begin:end].strip())
-                raw_answer_option = raw_answer_option.replace(f"#{n}#", f"\n{n}) ")
+            while f"#{n}#" in raw_answers_options:
+                begin = raw_answers_options.find(f"#{n}#") + 3
+                end = raw_answers_options.find(f"#{n + 1}#")
+                answers_options.append(f"{n}) " + raw_answers_options[begin:end].strip())
+                raw_answers_options = raw_answers_options.replace(f"#{n}#", f"\n{n}) ")
                 n += 1
 
             await message.answer(question)
-            await message.answer(raw_answer_option, reply_markup=await kb.button_answers(answer_option))
-            await state.update_data(waiting_for_answer=answer_option)
+            await message.answer(raw_answers_options, reply_markup=await kb.button_answers(answers_options))
+            await state.update_data(waiting_for_answer=answers_options)
             await state.update_data(correct_answer_virus=correct_answer)
-            await state.update_data(explanation=explanation)
+            await state.update_data(parts_text=parts_text)
             await state.set_state(UserState.waiting_for_answer)
 
-        async def hard_func(htext: str):
+        async def hard_func(htext: dict):
             await message.answer("🛠️ 'Практика по вирусам - сложно' находится в разработке...")
             await asyncio.sleep(2)
             await message.answer("Но вы можете попробовать другую сложность в данной практике")
@@ -387,15 +344,16 @@ async def set_request(message: Message, state: FSMContext):
             "hard": hard_func
         }
 
-        await challenge_dict[challenge](text)
 
-    async def safety_func(text: str, challenge: str):
+
+        await challenge_dict[challenge](parts_text)
+
+    async def safety_func(parts_text: dict, challenge: str):
         await message.answer("Это альфа версия задач по безопасности в сети, новая версия в разработке...")
-        part_text = text.split("-----")
-        task = part_text[0]
-        question = part_text[1]
+        task = parts_text["task"]
+        question = parts_text["question"]
 
-        await state.update_data(hints_response=part_text)
+        await state.update_data(parts_text=parts_text)
         await state.set_state(UserState.waiting_for_answer)
         await message.answer(task)
         await message.answer(question, reply_markup=kb.user_answer)
@@ -407,40 +365,44 @@ async def set_request(message: Message, state: FSMContext):
     }
 
     data = await get_ai_text(message, state)
-    ai_text = data["text"]
+    ai_text_splited = data["text"].split("|")
     practice = data["practice"]
-    challenge = data["challenge"]
-    await func_dict[practice](ai_text, challenge)
+    difficulty = data["challenge"]
+
+    parts_ai_text = dict(zip(practice_keys[practice], ai_text_splited))
+    await func_dict[practice](parts_ai_text, difficulty)
 
 #                                                                                                   answer-FRACTICE_FUNC
 
 @router.message(UserState.waiting_for_answer, TextInListFilter())
 async def check_answer_u(message: Message, state: FSMContext):
     data = await state.get_data()
+    parts_text = data["parts_text"]
+    explanation = parts_text["explanation"] if ("explanation" in parts_text) else ""
 
-    explanation = data["explanation"] if ("explanation" in data) else ""
-
-    correct_answer = data["correct_answer_virus"]
+    correct_answer = parts_text["answer"]
     begin = correct_answer.find("#")
     end = correct_answer.find("#", begin + 1)
     correct_answer = correct_answer[begin + 1:end]
 
     user_answer = message.text
+    print(user_answer)
     if user_answer[0] in correct_answer:
-        await message.answer("✅ Верно!", reply_markup=kb.continue_or_no)
+        await message.answer(f"✅ Верно!\n{explanation}", reply_markup=kb.continue_or_no)
         await DB.update_data(message.from_user.id, add_correct_answer=1)
     else:
         await message.answer(f"❌ Неверно(\n Правильный ответ: {correct_answer}\n{explanation}", reply_markup=kb.continue_or_no)
         await DB.update_data(message.from_user.id, add_incorrect_answer=1)
+    await state.set_state(None)
 
 #                                                                                                   yes/no-PRACTICE_FUNC
 
 @router.message(UserState.waiting_for_answer, F.text.in_(["Да", "Нет"]))
 async def check_answer(message:Message, state: FSMContext):
     data = await state.get_data()
-    response = data.get('hints_response')
-    true_answer = response[2].upper()
-    explanation = response[3]
+    response = data.get('parts_text')
+    true_answer = response["answer"].upper()
+    explanation = response["explanation"]
 
     if message.text.upper() in true_answer:
         await message.answer(f"Правильно✅\n{explanation}", reply_markup=kb.continue_or_no)
@@ -448,29 +410,31 @@ async def check_answer(message:Message, state: FSMContext):
     else:
         await message.answer(f"Неправильно❌\n{explanation}", reply_markup=kb.continue_or_no)
         await DB.update_data(message.from_user.id, add_incorrect_answer=1)
+        await state.set_state(None)
 
 #                                                                                                    hints-PRACTICE_FUNC
 
 @router.message(F.text == "Подсказка")
 async def helping_test(message:Message, state:FSMContext):
     data = await state.get_data()
-    hints = data.get('hints_response')[4]
-    current_index = data.get('current_index', 0)
+    parts_text = data.get('parts_text', {"hints": None})
+    hints: str | None = parts_text["hints"]
+    current_index = data.get('current_index')
 
     if not hints:
-        return
+        await message.answer("Ошибка генерации подсказок :(")
 
-    sps_helps = []
-    while "#1" in hints:
-        start = hints.find("#1") + 2
-        end = hints.find("#2")
-
-        if start != -1 and end != -1:
-            result = hints[start:end].strip()
-            sps_helps.append(result)
-            hints = hints[end + 2:]
-        else:
-            break
+    sps_helps = hints.split("/") if (type(hints) is str) and ("/" in hints) else None
+    # while "#1" in hints:
+    #     start = hints.find("#1") + 2
+    #     end = hints.find("#2")
+    #
+    #     if start != -1 and end != -1:
+    #         result = hints[start:end].strip()
+    #         sps_helps.append(result)
+    #         hints = hints[end + 2:]
+    #     else:
+    #         break
 
     if not sps_helps:
         await message.answer("В тексте нет подсказок")
@@ -496,6 +460,64 @@ async def check_stats(message:Message):
                          f"Рейтинг: {correct_answers*15 - incorrect_answers*10}\n"
                          f"✅ Правильных ответов: {correct_answers}"
                          f"\n❌ Неправильных ответов: {incorrect_answers}")
+
+#                                                                                                          STATE_WAITING
+
+@router.message(UserState.wait_file)
+async def analys_file(message: Message, state: FSMContext, bot: Bot):
+    if doc := message.document:
+        await state.clear()
+        name: str = doc.file_name
+        if doc.file_size < 20*1024*1024: # 20Mb
+            await bot.download(doc.file_id, destination=f"app/{name}")
+            await message.answer("Файл загружен! Анализирую файл...")
+
+            result = await get_file_info(name)
+            result = result.split("#S0S#")
+            part_one = result[0]
+            part_two = result[1]
+            part_three = result[2]
+            await message.answer(part_one, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.more_info)
+            await message.answer(part_two, parse_mode=ParseMode.MARKDOWN_V2)
+            await message.answer(part_three, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.all_functions)
+        else:
+            await message.answer(f"Файл слишком большой (Лимит 20Мб)")
+            await message.answer('Вы можете его проверить на сайте '
+                                 '[VirusTotal](https://www.virustotal.com/gui/home/upload)',
+                                parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.all_functions)
+
+    else:
+        data = await state.get_data()
+        mess = data["wait_file"]
+        await bot.send_message(mess[1], ".", reply_to_message_id=mess[0])
+
+@router.message(UserState.password_len)
+async def generation_password(message: Message, state: FSMContext):
+    try:
+        await state.update_data(password_len=message.text)
+        data = await state.get_data()
+        length_pass = int(data["password_len"])
+        result = generation(length_pass)
+
+        if result["code"] == 1:
+            await message.answer(result["text"], reply_markup=kb.password_choose)
+            await state.clear()
+        else:
+            await message.answer((result["text"]))
+
+    except ValueError:
+        await message.answer("Введите целое число!")
+    except Exception as e:
+        await message.answer(f"Неожиданныя ошибка!\n{e}")
+
+@router.message(UserState.user_password)
+async def check_password(message: Message, state: FSMContext):
+    await state.update_data(user_password=message.text)
+    data = await state.get_data()
+    result = checking(data["user_password"])
+    await message.answer(result["text"])
+    if result["code"] == 1:
+        await state.clear()
 
 #                                                                                                                  OTHER
 
