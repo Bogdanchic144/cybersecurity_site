@@ -46,7 +46,7 @@ class LoggingMiddleware(BaseMiddleware):
         logger.info(f"Получен коллбэк: {log_data}")
 
 
-bot = Bot(token=Config.BOT_TOKEN, timeout=ClientTimeout(total=120))
+bot = Bot(token=Config.BOT_TOKEN, timeout=ClientTimeout(total=300))
 dp = Dispatcher()
 dp.update.middleware(LoggingMiddleware())
 

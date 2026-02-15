@@ -468,18 +468,31 @@ async def analys_file(message: Message, state: FSMContext, bot: Bot):
     if doc := message.document:
         await state.clear()
         name: str = doc.file_name
+        bot_msg = await message.answer("💾 Скачиваю файл...")
         if doc.file_size < 20*1024*1024: # 20Mb
-            await bot.download(doc.file_id, destination=f"app/{name}")
-            await message.answer("Файл загружен! Анализирую файл...")
+            try:
+                await bot.download(doc.file_id, destination=f"app/{name}", timeout=300)
+            except Exception as e:
+                await bot_msg.edit_text("Ошибка скачивания ⚠️")
+                await message.answer("К сожалению, telegram в России замедляют и иногда файлы "
+                                     "не могут загрузиться на сервер за определенное время, сейчас это и произошло.")
+                await message.answer("Вы можете попробовать ещё раз /virus_total")
+                await message.answer(str(e))
+                return
+            await bot_msg.edit_text("📁 Файл загружен! Анализирую файл...")
 
             result = await get_file_info(name)
-            result = result.split("#S0S#")
-            part_one = result[0]
-            part_two = result[1]
-            part_three = result[2]
-            await message.answer(part_one, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.more_info)
-            await message.answer(part_two, parse_mode=ParseMode.MARKDOWN_V2)
-            await message.answer(part_three, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.all_functions)
+            if "#S0S#" in result:
+                result = result.split("#S0S#")
+                part_one = result[0]
+                part_two = result[1]
+                part_three = result[2]
+
+                await bot_msg.edit_text(part_one, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.more_info)
+                await message.answer(part_two, parse_mode=ParseMode.MARKDOWN_V2)
+                await message.answer(part_three, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=kb.all_functions)
+            else:
+                await message.answer(result, parse_mode=ParseMode.MARKDOWN_V2)
         else:
             await message.answer(f"Файл слишком большой (Лимит 20Мб)")
             await message.answer('Вы можете его проверить на сайте '
