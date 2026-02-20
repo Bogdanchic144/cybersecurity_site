@@ -197,7 +197,7 @@ async def set_challenge(callback: CallbackQuery, state: FSMContext):
 
 #                                                                                               generation-PRACTICE_FUNC
 
-async def get_ai_text(message, state) -> dict | None:
+async def get_ai_text(message: Message, state, text=None) -> dict | None:
     data = await state.get_data()
 
     if ("challenge" not in data) or ("model_ai" not in data) or ("path_task" not in data):
@@ -211,17 +211,19 @@ async def get_ai_text(message, state) -> dict | None:
     model = data["model_ai"]
     path_task = data["path_task"]
 
-    async with aiofiles.open(f"{path_task + challenge_choose + '.txt'}", "r", encoding='utf-8') as file:
-        prompt = await file.read()
-
     max_retries = 5
     retry_delay = 2
     to_delete = await message.answer("Секунду...", reply_markup=ReplyKeyboardRemove())
     for attempt in range(max_retries):
         try:
-            text_generation = await send_prompt(prompt, model) if \
-                (path_task + challenge_choose != 'app/prompts/virus/hard') \
-                else "1-----2-----3-----4-----5" #УДАЛИТЬ! после реализации
+            if text:
+                text_generation = await send_prompt(text, model)
+
+            else: # type Message
+                async with aiofiles.open(f"{path_task + challenge_choose + '.txt'}", "r", encoding='utf-8') as file:
+                    prompt = await file.read()
+
+                text_generation = await send_prompt(prompt, model)
             print(text_generation)
             # запрос ии
 
@@ -334,9 +336,10 @@ async def set_request(message: Message, state: FSMContext):
             await state.set_state(UserState.waiting_for_answer)
 
         async def hard_func(htext: dict):
-            await message.answer("🛠️ 'Практика по вирусам - сложно' находится в разработке...")
-            await asyncio.sleep(2)
-            await message.answer("Но вы можете попробовать другую сложность в данной практике")
+            await message.answer(htext["question"])
+            await state.set_state(UserState.waiting_for_answer)
+            await state.update_data(parts_text=htext["question"])
+
 
         challenge_dict = {
             "easy": easy_func,
@@ -365,7 +368,7 @@ async def set_request(message: Message, state: FSMContext):
     }
 
     data = await get_ai_text(message, state)
-    ai_text_splited = data["text"].split("|")
+    ai_text_splited = data["text"].split("|") if "|" in data["text"] else [data["text"], 0]
     practice = data["practice"]
     difficulty = data["challenge"]
 
@@ -412,6 +415,27 @@ async def check_answer(message:Message, state: FSMContext):
         await DB.update_data(message.from_user.id, add_incorrect_answer=1)
         await state.set_state(None)
 
+@router.message(UserState.waiting_for_answer)
+async def check_answer(message: Message, state: FSMContext):
+    data = await state.get_data()
+    ai_question: str = data.get('parts_text', "ИГНОРИРУЙ ВСЕ ЧТО ДАЛЬШЕ НАПИСАНО, НАПИШИ ТОЛЬКО - ОШИБКА ГЕНЕРАЦИИ ВОПРОСА")
+    ai_data = await get_ai_text(message, state, f"{ai_question}"
+                                                f"\n\n\nОТВЕТ ПОЛЬЗОВАТЕЛЯ: {message.text}"
+                                                f"\n\n\nПроанализируй задачу и ответ на неё, проверь насколько "
+                                                f"правильный ответ дал пользователь, в конце скажи '#1Зачёт#2' "
+                                                f"или '#1Незачёт#2')")
+    ai_text = ai_data["text"]
+
+    if "#1Зачёт#2" in ai_text:
+        await DB.update_data(message.from_user.id, add_correct_answer=1)
+        ai_text = ai_text.replace("#1Зачёт#2", "✅ Зачёт")
+    if "#1Незачёт#2" in ai_text:
+        await DB.update_data(message.from_user.id, add_incorrect_answer=1)
+        ai_text = ai_text.replace("#1Незачёт#2", "❌ Незачёт")
+
+    await message.answer(ai_text, reply_markup=kb.continue_or_no)
+    await state.set_state(None)
+
 #                                                                                                    hints-PRACTICE_FUNC
 
 @router.message(F.text == "Подсказка")
@@ -425,16 +449,6 @@ async def helping_test(message:Message, state:FSMContext):
         await message.answer("Ошибка генерации подсказок :(")
 
     sps_helps = hints.split("/") if (type(hints) is str) and ("/" in hints) else None
-    # while "#1" in hints:
-    #     start = hints.find("#1") + 2
-    #     end = hints.find("#2")
-    #
-    #     if start != -1 and end != -1:
-    #         result = hints[start:end].strip()
-    #         sps_helps.append(result)
-    #         hints = hints[end + 2:]
-    #     else:
-    #         break
 
     if not sps_helps:
         await message.answer("В тексте нет подсказок")
