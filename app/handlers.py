@@ -337,6 +337,7 @@ async def set_request(message: Message, state: FSMContext):
 
         async def hard_func(htext: dict):
             await message.answer(htext["question"])
+            await message.answer("Напишите развернутый ответ до 4096 символов")
             await state.set_state(UserState.waiting_for_answer)
             await state.update_data(parts_text=htext["question"])
 
