@@ -414,7 +414,7 @@ async def check_answer(message:Message, state: FSMContext):
     else:
         await message.answer(f"Неправильно❌\n{explanation}", reply_markup=kb.continue_or_no)
         await DB.update_data(message.from_user.id, add_incorrect_answer=1)
-        await state.set_state(None)
+    await state.set_state(None)
 
 @router.message(UserState.waiting_for_answer)
 async def check_answer(message: Message, state: FSMContext):
