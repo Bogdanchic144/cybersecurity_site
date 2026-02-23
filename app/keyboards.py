@@ -42,5 +42,6 @@ all_functions = ReplyKeyboardMarkup(keyboard=[
 async def button_answers(list_buttons: list) -> ReplyKeyboardMarkup:
     keyboard = ReplyKeyboardBuilder()
     for button in list_buttons:
+        button = button[:40] + "..."
         keyboard.add(KeyboardButton(text=button))
     return keyboard.adjust(1).as_markup(resize_keyboard=True)
