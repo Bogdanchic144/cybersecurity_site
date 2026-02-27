@@ -33,6 +33,7 @@ class UserState(StatesGroup):
     ai_chat = State()
     path_task = State()
     explanation = State()
+    stats = State()
 
 router = Router()
 
@@ -466,15 +467,55 @@ async def helping_test(message:Message, state:FSMContext):
 
 @router.message(F.text == "Статистика")
 @router.message(Command("stats"))
-async def check_stats(message:Message):
-    stats = await DB.select_user(message.from_user.id)
-    correct_answers = stats.correct_answers
-    incorrect_answers = stats.incorrect_answers
-    await message.answer(f"[Cтатистика {message.from_user.first_name}]\n"
-                         f"Решено задач: {correct_answers+incorrect_answers}\n"
-                         f"Рейтинг: {correct_answers*15 - incorrect_answers*10}\n"
-                         f"✅ Правильных ответов: {correct_answers}"
-                         f"\n❌ Неправильных ответов: {incorrect_answers}")
+async def check_stats(message:Message, state:FSMContext):
+    stats = await DB.select_data(value=message.from_user.id, one=True)
+    if stats is not None:
+        correct_answers = stats.correct_answers
+        incorrect_answers = stats.incorrect_answers
+        await message.answer(f"👤 [ Cтатистика {message.from_user.first_name} ]\n"
+                             f"Решено задач: {correct_answers+incorrect_answers}\n"
+                             f"🏆 Рейтинг: {correct_answers * 15 - incorrect_answers * 10}\n"
+                             f"✅ Правильных ответов: {correct_answers}"
+                             f"\n❌ Неправильных ответов: {incorrect_answers}", reply_markup=kb.leaders)
+        await state.update_data(stats=stats)
+    else:
+        await message.answer("Ошибка! Такого пользователя не существует?\n"
+                             "Напишите мне в лс, как вы это сделали:@aiotist")
+
+@router.callback_query(F.data == "leaders")
+async def get_leaders(callback: CallbackQuery, state: FSMContext, bot: Bot):
+    data = await state.get_data()
+    user_stats = data.get("stats") # объект
+    last_10_user_stats = await DB.select_data(limit=10, sort_by="rank") # вернет список объектов
+    # параметры: .id .tg_id .correct_answers .incorrect_answers .rank
+    user_in_rating = False
+
+    if last_10_user_stats:
+        text = "Таблица лидеров"
+        for user in last_10_user_stats:
+            chat = await bot.get_chat(user.tg_id)
+
+            if chat.username:
+                username_or_name = "@" + chat.username
+            else:
+                username_or_name = f"<a href='tg://user?id={chat.id}'>{chat.last_name or chat.first_name}</a>"
+
+            text += (f"\n|\n| {username_or_name} 👤 {user.correct_answers} "
+                     f"✅ {user.incorrect_answers} ❌ {user.rank} 🏆")
+
+            if user.tg_id == user_stats.tg_id:
+                user_in_rating = True
+                text += " &lt;-"
+
+        if not user_in_rating:
+            text += (f"...\n"
+                     f"| @{callback.from_user.username} 👤 {user_stats.correct_answers} ✅ "
+                     f"{user_stats.incorrect_answers} ❌ {user_stats.rank} 🏆\n")
+
+        await callback.message.edit_text(text, parse_mode="HTML")
+
+    else:
+        await callback.answer("Произошла ошибка. Недостаточно данных")
 
 #                                                                                                          STATE_WAITING
 

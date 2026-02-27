@@ -39,6 +39,10 @@ all_functions = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Проверка файлов на вирусы")]
 ], resize_keyboard=True, one_time_keyboard=True, input_field_placeholder="Выберите пункт меню")
 
+leaders = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Таблица лидеров", callback_data="leaders")],
+])
+
 async def button_answers(list_buttons: list) -> ReplyKeyboardMarkup:
     keyboard = ReplyKeyboardBuilder()
     for button in list_buttons:
