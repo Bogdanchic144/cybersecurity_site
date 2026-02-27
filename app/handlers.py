@@ -493,19 +493,21 @@ async def get_leaders(callback: CallbackQuery, state: FSMContext, bot: Bot):
     if last_10_user_stats:
         text = "Таблица лидеров"
         for user in last_10_user_stats:
-            chat = await bot.get_chat(user.tg_id)
+            try:
+                chat = await bot.get_chat(user.tg_id)
+                if chat.username:
+                    username_or_name = "@" + chat.username
+                else:
+                    username_or_name = f"<a href='tg://user?id={chat.id}'>{chat.last_name or chat.first_name}</a>"
 
-            if chat.username:
-                username_or_name = "@" + chat.username
-            else:
-                username_or_name = f"<a href='tg://user?id={chat.id}'>{chat.last_name or chat.first_name}</a>"
+                text += (f"\n|\n| {username_or_name} 👤 {user.correct_answers} "
+                         f"✅ {user.incorrect_answers} ❌ {user.rank} 🏆")
 
-            text += (f"\n|\n| {username_or_name} 👤 {user.correct_answers} "
-                     f"✅ {user.incorrect_answers} ❌ {user.rank} 🏆")
-
-            if user.tg_id == user_stats.tg_id:
-                user_in_rating = True
-                text += " &lt;-"
+                if user.tg_id == user_stats.tg_id:
+                    user_in_rating = True
+                    text += " &lt;-"
+            except Exception as e:
+                print(e)
 
         if not user_in_rating:
             text += (f"...\n"
