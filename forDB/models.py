@@ -10,6 +10,7 @@ class UserStatistics(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     tg_id: Mapped[int] = mapped_column(unique=True, index=True)
+    username: Mapped[str] = mapped_column(default='not found')
     correct_answers: Mapped[int] = mapped_column(default=0)
     incorrect_answers: Mapped[int] = mapped_column(default=0)
 

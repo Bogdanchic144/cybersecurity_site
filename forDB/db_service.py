@@ -13,14 +13,14 @@ class DB:
             return None
 
     @staticmethod
-    async def insert_user(tg_id: int) -> None:
+    async def insert_user(tg_id: int, username: str) -> None:
         async with AsyncSessionLocal() as session:
             result = await session.execute(
                 select(UserStatistics).filter_by(tg_id=tg_id)
             )
             user = result.scalar_one_or_none()
             if user is None:
-                user = UserStatistics(tg_id=tg_id)
+                user = UserStatistics(tg_id=tg_id, username=username)
                 session.add(user)
                 await session.commit()
             return None

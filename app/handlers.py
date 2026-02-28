@@ -48,7 +48,12 @@ practice_keys = {
 @router.message(CommandStart())
 async def cmd_start(message:Message, state:FSMContext, command: CommandObject):
     await state.clear()
-    await DB.insert_user(message.from_user.id)
+    if message.from_user.username is not None:
+        username = "@" + message.from_user.username
+    else:
+        username = message.from_user.full_name
+    await DB.insert_user(tg_id=message.from_user.id,
+                         username=username)
     await asyncio.sleep(1)
 
     params_to_func = {
@@ -91,6 +96,23 @@ async def cmd_start(message:Message, state:FSMContext, command: CommandObject):
     # hello_ai = await set_prompt("Напиши приветствие и расскажи что ты умеешь", "flash")
     # await message.answer(hello_ai)
     # await state.set_state(UserState.ai_chat)
+
+@router.message(Command("send_all"))
+async def send_all(message: Message, bot: Bot):
+    if message.from_user.id == 5041480486:
+        users = [5041480486, 2092798692, 1651157132, 5203005276, 5010726064, 1106678479]
+        for user in users:
+            try:
+                await bot.send_message(chat_id=user, text="Я обновил систему, чтобы таблица лидеров работала "
+                                                            "быстрее и точнее. 🚀\n\nК сожалению, старые данные "
+                                                            "пришлось сбросить. Пожалуйста, нажмите /start, "
+                                                            "чтобы бот снова заработал корректно!")
+            except Exception as e:
+                await message.answer(f"Не удалось отправить сообщение {user}: {e}")
+                print(e)
+
+    else:
+        await message.answer("У вас нет доступа к этой команде!")
 
 #                                                                                                          PASSWORD_FUNC
 
@@ -487,31 +509,31 @@ async def get_leaders(callback: CallbackQuery, state: FSMContext, bot: Bot):
     data = await state.get_data()
     user_stats = data.get("stats") # объект
     last_10_user_stats = await DB.select_data(limit=10, sort_by="rank") # вернет список объектов
-    # параметры: .id .tg_id .correct_answers .incorrect_answers .rank
+    # параметры: .id .tg_id .username .correct_answers .incorrect_answers .rank
     user_in_rating = False
 
     if last_10_user_stats:
         text = "Таблица лидеров"
+        n = 1
+        teg = "b"
         for user in last_10_user_stats:
-            try:
-                chat = await bot.get_chat(user.tg_id)
-                if chat.username:
-                    username_or_name = "@" + chat.username
-                else:
-                    username_or_name = f"<a href='tg://user?id={chat.id}'>{chat.last_name or chat.first_name}</a>"
+            if "@" in user.username:
+                username_or_name = user.username
+            else:
+                username_or_name = f"<a href='tg://user?id={user.tg_id}'>{user.username}</a>"
 
-                text += (f"\n|\n| {username_or_name} 👤 {user.correct_answers} "
-                         f"✅ {user.incorrect_answers} ❌ {user.rank} 🏆")
-
-                if user.tg_id == user_stats.tg_id:
-                    user_in_rating = True
-                    text += " &lt;-"
-            except Exception as e:
-                print(e)
+            text += (f"\n{n}.\n<{teg}>[{username_or_name}👤][{user.correct_answers}"
+                     f"✅][{user.incorrect_answers}❌][{user.rank} 🏆]")
+            n += 1
+            if user.tg_id == user_stats.tg_id:
+                user_in_rating = True
+                text += f"</{teg}>"
+            else:
+                text = "".join(text.rsplit(f"<{teg}>", 1))
 
         if not user_in_rating:
             text += (f"...\n"
-                     f"| @{callback.from_user.username} 👤 {user_stats.correct_answers} ✅ "
+                     f"| {user_stats.username} 👤 {user_stats.correct_answers} ✅ "
                      f"{user_stats.incorrect_answers} ❌ {user_stats.rank} 🏆\n")
 
         await callback.message.edit_text(text, parse_mode="HTML")
